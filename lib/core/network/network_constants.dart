@@ -8,4 +8,5 @@ abstract class EndPoints {
   static const String register = "auth/register";
   static const String login = "auth/login";
   static const String cvCoash="api/analyze_cv/";
+  static const String getGobs="https://nexusporject.runasp.net/LinkedIn/GetJobs";
 }

@@ -1,6 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
-
 import 'failures.dart';
 
 sealed class ApiResult<T> {}
