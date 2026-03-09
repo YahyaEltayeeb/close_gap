@@ -89,5 +89,8 @@
 "remote": "Remote",
 "onSite": "On-site",
 "fullTime": "Full-time",
-"timeAgo": "1d ago"
+"timeAgo": "1d ago",
+"viewPost": "View Post",
+"noPostsFound": "No posts found",
+"hiringPosts": "Hiring Posts"
   }
