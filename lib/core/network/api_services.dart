@@ -1,3 +1,4 @@
+import 'package:close_gap/features/get_linkedin_posts/data/models/response_linkedin_posts_model_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:close_gap/core/network/network_constants.dart';
 import 'package:close_gap/features/auth/login/data/model/request/login_request_dto.dart';
@@ -24,4 +25,12 @@ abstract class ApiServices {
   @POST(EndPoints.cvCoash)
   @MultiPart()
   Future<CvAnalysisResponseDto> cvCoash(@Part(name: "file") MultipartFile file);
+@GET(EndPoints.getGobs)
+  Future<List<GetJobsModelDto>> getJobs(
+    
+  );
+
+  @GET(EndPoints.getLinkedinPosts)
+  Future<LinkedinPostsResponseDto> getLinkedinPosts();
+
 }
