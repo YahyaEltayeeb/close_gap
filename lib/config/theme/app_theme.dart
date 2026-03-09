@@ -23,13 +23,14 @@ abstract class AppTheme {
       iconTheme: IconThemeData(color: AppColors.darkBottomNav),
 
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.lightCard,
+        backgroundColor: AppColors.white,
+        elevation: 0,
         centerTitle: true,
-        iconTheme: IconThemeData(color: AppColors.lightIcon),
+        iconTheme: IconThemeData(color: AppColors.black),
         titleTextStyle: GoogleFonts.balooThambi2(
-          color: AppColors.white,
-          fontSize: 20,
-          fontWeight: AppFontWeight.bold,
+          color: AppColors.black,
+          fontSize: 18,
+          fontWeight: AppFontWeight.semiBold,
         ),
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(

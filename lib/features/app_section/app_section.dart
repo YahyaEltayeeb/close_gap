@@ -1,10 +1,10 @@
+import 'package:close_gap/features/get_jobs/presentation/page/get_jobs_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:close_gap/core/extensions/extensions.dart';
 import 'package:close_gap/features/app_section/widget/custom_drawer.dart';
 import 'package:close_gap/features/auth/profile/presentation/pages/profile_screen.dart';
 import 'package:close_gap/features/courses/presentation/pages/courses_screen.dart';
 import 'package:close_gap/features/home/presentation/pages/home_screen.dart';
-import 'package:close_gap/features/jobs/presentation/pages/jobs_screen.dart';
 
 class AppSection extends StatefulWidget {
   const AppSection({super.key});
@@ -21,7 +21,7 @@ class _AppSectionState extends State<AppSection> {
   final List<Widget> pages = const [
     HomeScreen(),
     CoursesScreen(),
-    JobsScreen(),
+   GetJobsScreen(),
     ProfileScreen(),
   ];
 

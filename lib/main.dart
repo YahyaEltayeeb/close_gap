@@ -1,3 +1,7 @@
+import 'package:close_gap/config/routing/app_routes.dart';
+import 'package:close_gap/config/routing/routing_generator.dart';
+import 'package:close_gap/config/theme/app_theme.dart';
+import 'package:close_gap/core/l10n/translations/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:close_gap/core/di/di.dart';
@@ -24,14 +28,14 @@ class CloseGap extends StatelessWidget {
     return BlocBuilder<LocaleThemeCubit, LocaleThemeState>(
       builder: (context, state) {
         return MaterialApp(
-          // localizationsDelegates: AppLocalizations.localizationsDelegates,
-          // supportedLocales: AppLocalizations.supportedLocales,
-          // locale: state.locale,
-          // theme: state.isDark ? AppTheme.darkTheme : AppTheme.lightTheme,
-          // debugShowCheckedModeBanner: false,
-          // onGenerateRoute: RouteGenerator.getRoute,
-          // initialRoute: AppRoutes.appSections,
-          home:CvCoachScreen(),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: state.locale,
+          theme: state.isDark ? AppTheme.darkTheme : AppTheme.lightTheme,
+          debugShowCheckedModeBanner: false,
+          onGenerateRoute: RouteGenerator.getRoute,
+          initialRoute: AppRoutes.appSections,
+         
         );
       },
     );

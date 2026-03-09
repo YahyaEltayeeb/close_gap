@@ -17,7 +17,7 @@ abstract class ExternalModules {
   Dio provideDio() {
     
     Dio dio = Dio();
-    dio.options.baseUrl = NetworkConstants.baseUrl;
+ //   dio.options.baseUrl = NetworkConstants.baseUrl;
      (dio.httpClientAdapter as DefaultHttpClientAdapter)
       .onHttpClientCreate = (HttpClient client) {
     client.badCertificateCallback =

@@ -1,3 +1,4 @@
+import 'package:close_gap/features/get_jobs/presentation/page/get_jobs_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:close_gap/features/app_section/app_section.dart';
 import 'package:close_gap/features/auth/register/presentation/pages/register_screen.dart';
@@ -22,6 +23,9 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) => const StuRegisterScreen(),
         );
+
+      case AppRoutes.getJobs:
+      return MaterialPageRoute(builder: (_)=>GetJobsScreen())  ;
       default:
         return unDefinedRoute();
     }
