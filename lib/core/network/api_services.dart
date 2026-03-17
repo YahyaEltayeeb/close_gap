@@ -24,4 +24,8 @@ abstract class ApiServices {
   @POST(EndPoints.cvCoash)
   @MultiPart()
   Future<CvAnalysisResponseDto> cvCoash(@Part(name: "file") MultipartFile file);
+
+ @POST('https://nexusporject.runasp.net/cv/generate-cv')
+  @DioResponseType(ResponseType.bytes)
+  Future<HttpResponse<List<int>>> generateCv();
 }
