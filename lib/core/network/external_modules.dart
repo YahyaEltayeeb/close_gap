@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -9,7 +8,6 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../di/di.dart';
 import '../services/token_interceptor.dart';
-import 'network_constants.dart';
 
 @module
 abstract class ExternalModules {

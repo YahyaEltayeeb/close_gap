@@ -1,3 +1,5 @@
+import 'package:close_gap/features/compare_cv/data/model/request/compare_cv_request_dto.dart';
+import 'package:close_gap/features/compare_cv/data/model/response/compare_cv_response_dto.dart';
 import 'package:close_gap/features/get_jobs/data/models/response_get_jobs_model_dto.dart';
 import 'package:close_gap/features/get_linkedin_posts/data/models/response_linkedin_posts_model_dto.dart';
 import 'package:dio/dio.dart';
@@ -33,5 +35,8 @@ abstract class ApiServices {
 
   @GET(EndPoints.getLinkedinPosts)
   Future<LinkedinPostsResponseDto> getLinkedinPosts();
+
+  @POST(EndPoints.compareCv)
+  Future<CompareCvResponseDto> compareCv(@Body() CompareCvRequestDto request);
 
 }

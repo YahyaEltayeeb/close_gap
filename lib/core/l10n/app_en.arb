@@ -92,5 +92,10 @@
 "timeAgo": "1d ago",
 "viewPost": "View Post",
 "noPostsFound": "No posts found",
-"hiringPosts": "Hiring Posts"
+"hiringPosts": "Hiring Posts",
+"cvAnalysisTitle": "Job Description Analysis",
+"analysis": "Analysis",
+"sendCvTo": "Send your CV to:",
+"noDataFound": "No data found",
+"compareCV": "Compare CV"
   }

@@ -1,4 +1,5 @@
 import 'package:close_gap/core/l10n/translations/app_localizations.dart';
+import 'package:close_gap/features/compare_cv/presentation/page/compare_cv_result_screen.dart';
 import 'package:close_gap/features/get_jobs/presentation/widget/app_card.dart';
 import 'package:close_gap/features/get_linkedin_posts/domain/entities/linkedin_post_entity.dart';
 import 'package:close_gap/features/get_linkedin_posts/presentation/widget/skill_chip.dart';
@@ -85,6 +86,22 @@ class LinkedinPostCard extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: () => _navigateToCompare(context),
+              icon: const Icon(Icons.compare_arrows, size: 18),
+              label: const Text('Compare CV'),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: theme.colorScheme.primary,
+                side: BorderSide(color: theme.colorScheme.primary),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -95,5 +112,14 @@ class LinkedinPostCard extends StatelessWidget {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     }
+  }
+
+  void _navigateToCompare(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CompareCvResultScreen(post: post),
+      ),
+    );
   }
 }

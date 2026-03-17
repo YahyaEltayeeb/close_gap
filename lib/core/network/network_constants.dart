@@ -10,4 +10,5 @@ abstract class EndPoints {
   static const String cvCoash="api/analyze_cv/";
   static const String getGobs="https://nexusporject.runasp.net/LinkedIn/GetJobs";
   static const String getLinkedinPosts="https://nexusporject.runasp.net/LinkedIn/GetPosts";
+  static const String compareCv="https://nexusporject.runasp.net/LinkedIn/CompareCv";
 }
