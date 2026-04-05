@@ -92,5 +92,12 @@
 "timeAgo": "1d ago",
 "viewPost": "View Post",
 "noPostsFound": "No posts found",
-"hiringPosts": "Hiring Posts"
+"hiringPosts": "Hiring Posts",
+"teacher": "Teacher",
+"teacher_key": "Teacher Key",
+"teacher_key_required": "Teacher key is required",
+"teacher_key_incorrect": "Teacher key is incorrect",
+"already_have_an_account": "Already have an account?",
+"university": "University",
+"an_error_occurred": "An error occurred"
   }

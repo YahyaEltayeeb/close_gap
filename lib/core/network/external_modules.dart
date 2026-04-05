@@ -15,19 +15,17 @@ import 'network_constants.dart';
 abstract class ExternalModules {
   @lazySingleton
   Dio provideDio() {
-    
     Dio dio = Dio();
- //   dio.options.baseUrl = NetworkConstants.baseUrl;
-     (dio.httpClientAdapter as DefaultHttpClientAdapter)
-      .onHttpClientCreate = (HttpClient client) {
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => true;
-    return client;
-  };
-   // dio.options.headers = {'Content-Type': 'application/json'};
+    dio.options.baseUrl = NetworkConstants.baseUrl;
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+          client.badCertificateCallback =
+              (X509Certificate cert, String host, int port) => true;
+          return client;
+        };
     dio.interceptors.add(getIt.get<PrettyDioLogger>());
     dio.interceptors.add(getIt.get<TokenInterceptor>());
-    
+
     return dio;
   }
 

@@ -5,6 +5,7 @@ abstract class AppAssets {
       'assets/images/app_logo_removebg-preview 1.png';
   static const String appLogoDark =
       'assets/images/app_logo-dark_removebg-preview 1.png';
+  static const String nexusLogo = 'assets/images/logo_neuxe.png';
   static const String google = 'assets/images/google.png';
   static const String facebook = 'assets/images/facebook.png';
 }

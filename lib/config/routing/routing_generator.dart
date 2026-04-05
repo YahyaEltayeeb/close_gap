@@ -1,6 +1,7 @@
 import 'package:close_gap/features/get_jobs/presentation/page/get_jobs_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:close_gap/features/app_section/app_section.dart';
+import 'package:close_gap/features/auth/register/domain/entities/register_request_entity.dart';
 import 'package:close_gap/features/auth/register/presentation/pages/register_screen.dart';
 import 'package:close_gap/features/auth/register/presentation/pages/stu_register_screen.dart';
 import 'package:close_gap/features/home/presentation/pages/home_screen.dart';
@@ -20,12 +21,13 @@ class RouteGenerator {
       case AppRoutes.register:
         return MaterialPageRoute(builder: (context) => const RegisterScreen());
       case AppRoutes.stuRegister:
+        final requestEntity = settings.arguments as RegisterRequestEntity;
         return MaterialPageRoute(
-          builder: (context) => const StuRegisterScreen(),
+          builder: (context) => StuRegisterScreen(requestEntity: requestEntity),
         );
 
       case AppRoutes.getJobs:
-      return MaterialPageRoute(builder: (_)=>GetJobsScreen())  ;
+        return MaterialPageRoute(builder: (_) => GetJobsScreen());
       default:
         return unDefinedRoute();
     }
