@@ -15,7 +15,6 @@ import 'network_constants.dart';
 abstract class ExternalModules {
   @lazySingleton
   Dio provideDio() {
-    
     Dio dio = Dio();
  //   dio.options.baseUrl = NetworkConstants.baseUrl;
      (dio.httpClientAdapter as DefaultHttpClientAdapter)
@@ -27,10 +26,10 @@ abstract class ExternalModules {
    // dio.options.headers = {'Content-Type': 'application/json'};
     dio.interceptors.add(getIt.get<PrettyDioLogger>());
     dio.interceptors.add(getIt.get<TokenInterceptor>());
-    
+    dio.interceptors.add(getIt.get<PrettyDioLogger>());
+
     return dio;
   }
-
 
   @lazySingleton
   PrettyDioLogger providePrettyDioLogger() {

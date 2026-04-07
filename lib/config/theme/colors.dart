@@ -31,4 +31,27 @@ abstract class AppColors {
   static const Color darkProgress = Color(0xFF0084FF);
   static const Color darkBottomNav = Color(0xFF161616);
   static const Color blacklight=Color(0xff101114);
+
+  // generate cv screen
+  
+   // Primary
+  static const Color primary = Color(0xFF2979FF);
+  static const Color primaryDark = Color(0xFF1565C0);
+ 
+  // Background
+  static const Color scaffoldBackground = Color(0xFFF2F2F7);
+  static const Color cardBackground = Color(0xFFFFFFFF);
+ 
+  // Text
+  static const Color textPrimary = Color(0xFF000000);
+  static const Color textSecondary = Color(0xFF8E8E93);
+ 
+  // Border
+  static const Color border = Color(0xFFD1D1D6);
+ 
+  // Divider
+  static const Color divider = Color(0xFFE5E5EA);
+ 
+  // Button outline text
+  static const Color outlineButtonText = Color(0xFF2979FF);
 }
