@@ -7,18 +7,16 @@ abstract class AppColors {
   
 
   // ==== Light Mode ====
-  static const Color lightBackground = Color(0xFFF7F7F7);
+  static const Color lightBackground = Color(0xFFF3F2EF);
   static const Color lightCard = Color(0xFFFFFFFF);
-  static const Color lightPrimary = Color(
-    0xFF0059FF,
-  ); // اللون الأزرق الرئيسي للأزرار
+  static const Color lightPrimary = Color(0xFF0A66C2); // LinkedIn Blue
   static const Color lightlable = Color(0xFF454B60);
-  static const Color lightTextPrimary = Color(0xFF0C0C0C);
-  static const Color lightTextSecondary = Color(0xffE4E4E4);
-  static const Color lightIcon = Color(0xFF1E1E1E);
-  static const Color lightProgress = Color(0xFF0084FF);
+  static const Color lightTextPrimary = Color(0xFF000000);
+  static const Color lightTextSecondary = Color(0xFF666666);
+  static const Color lightIcon = Color(0xFF000000);
+  static const Color lightProgress = Color(0xFF0A66C2);
   static const Color lightBottomNav = Color(0xFFFFFFFF);
-  static const Color grey=Color(0xff5F5F5F);
+  static const Color grey = Color(0xFF666666);
 
   // ==== Dark Mode ====
   static const Color darkBackground = Color(0xFF0B0B0B);

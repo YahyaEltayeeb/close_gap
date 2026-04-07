@@ -11,4 +11,6 @@ abstract class EndPoints {
   static const String generateCv =
       "https://nexusporject.runasp.net/cv/generate-cv";
  
+  static const String getGobs="https://nexusporject.runasp.net/LinkedIn/GetJobs";
+  static const String getLinkedinPosts="https://nexusporject.runasp.net/LinkedIn/GetPosts";
 }

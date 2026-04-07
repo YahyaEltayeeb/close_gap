@@ -1,3 +1,5 @@
+import 'package:close_gap/features/get_jobs/data/models/response_get_jobs_model_dto.dart';
+import 'package:close_gap/features/get_linkedin_posts/data/models/response_linkedin_posts_model_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:close_gap/core/network/network_constants.dart';
 import 'package:close_gap/features/auth/login/data/model/request/login_request_dto.dart';
@@ -28,4 +30,12 @@ abstract class ApiServices {
  @POST('https://nexusporject.runasp.net/cv/generate-cv')
   @DioResponseType(ResponseType.bytes)
   Future<HttpResponse<List<int>>> generateCv();
+@GET(EndPoints.getGobs)
+  Future<List<GetJobsModelDto>> getJobs(
+    
+  );
+
+  @GET(EndPoints.getLinkedinPosts)
+  Future<LinkedinPostsResponseDto> getLinkedinPosts();
+
 }
