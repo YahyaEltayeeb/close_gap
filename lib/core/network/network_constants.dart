@@ -10,7 +10,11 @@ abstract class EndPoints {
   static const String cvCoash = "api/analyze_cv/";
   static const String generateCv =
       "https://nexusporject.runasp.net/cv/generate-cv";
- 
-  static const String getGobs="https://nexusporject.runasp.net/LinkedIn/GetJobs";
-  static const String getLinkedinPosts="https://nexusporject.runasp.net/LinkedIn/GetPosts";
+
+  static const String getGobs =
+      "https://nexusporject.runasp.net/LinkedIn/GetJobs";
+  static const String getLinkedinPosts =
+      "https://nexusporject.runasp.net/LinkedIn/GetPosts";
+  static const String advancedLearningPlan =
+      "https://mmm.nexxuus.site/learning/advanced_plan";
 }

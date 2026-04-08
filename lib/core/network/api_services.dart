@@ -1,5 +1,7 @@
 import 'package:close_gap/features/get_jobs/data/models/response_get_jobs_model_dto.dart';
 import 'package:close_gap/features/get_linkedin_posts/data/models/response_linkedin_posts_model_dto.dart';
+import 'package:close_gap/features/learning/advanced_plan/data/models/request/advanced_learning_plan_request_dto.dart';
+import 'package:close_gap/features/learning/advanced_plan/data/models/response/advanced_learning_plan_response_dto.dart';
 import 'package:dio/dio.dart';
 import 'package:close_gap/core/network/network_constants.dart';
 import 'package:close_gap/features/auth/login/data/model/request/login_request_dto.dart';
@@ -27,15 +29,18 @@ abstract class ApiServices {
   @MultiPart()
   Future<CvAnalysisResponseDto> cvCoash(@Part(name: "file") MultipartFile file);
 
- @POST('https://nexusporject.runasp.net/cv/generate-cv')
+  @POST('https://nexusporject.runasp.net/cv/generate-cv')
   @DioResponseType(ResponseType.bytes)
   Future<HttpResponse<List<int>>> generateCv();
-@GET(EndPoints.getGobs)
-  Future<List<GetJobsModelDto>> getJobs(
-    
-  );
+
+  @GET(EndPoints.getGobs)
+  Future<List<GetJobsModelDto>> getJobs();
 
   @GET(EndPoints.getLinkedinPosts)
   Future<LinkedinPostsResponseDto> getLinkedinPosts();
 
+  @POST(EndPoints.advancedLearningPlan)
+  Future<AdvancedLearningPlanResponseDto> getAdvancedLearningPlan(
+    @Body() AdvancedLearningPlanRequestDto requestDto,
+  );
 }
