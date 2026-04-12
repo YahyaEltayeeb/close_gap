@@ -72,7 +72,7 @@ class _ExamScreenState extends State<ExamScreen> {
     Navigator.pushReplacementNamed(
       context,
       AppRoutes.examResult,
-      arguments: args,
+      arguments: {...args, 'trackId': widget.examId},
     );
   }
 

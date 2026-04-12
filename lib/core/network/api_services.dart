@@ -69,9 +69,10 @@ abstract class ApiServices {
   @POST(EndPoints.visionCheck)
   Future<VisionCheckCameraResponse> visionCheck(
     @Body() VisionCheckCameraRequest visionCheckCameraRequest,
-    Future<AdvancedLearningPlanResponseDto> Function(
-      @Body() AdvancedLearningPlanRequestDto requestDto,
-    )
-    getAdvancedLearningPlan,
+  );
+  @POST(EndPoints.advancedLearningPlan)
+  
+  Future<AdvancedLearningPlanResponseDto> getAdvancedLearningPlan(
+    @Body() AdvancedLearningPlanRequestDto requestDto,
   );
 }

@@ -42,7 +42,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 );
               } else if (state.isSuccess) {
                 ToastMessage.toastMsg(locale.login_success);
-                context.pushNamed(AppRoutes.appSections);
+                context.pushNamedAndRemoveUntil(
+                  AppRoutes.instructionspage,
+                  arguments: 1,
+                  predicate: (route) => false,
+                );
               }
             },
 

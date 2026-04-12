@@ -1,3 +1,5 @@
+import 'package:close_gap/config/routing/app_routes.dart';
+import 'package:close_gap/config/routing/routing_extensions.dart';
 import 'package:close_gap/features/assessment/domain/entities/exam_finish_entity.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -5,11 +7,13 @@ import 'dart:math' as math;
 class ExamResultScreen extends StatefulWidget {
   final bool invalidated;
   final ExamFinishEntity? result;
+  final int trackId;
 
   const ExamResultScreen({
     super.key,
     required this.invalidated,
     this.result,
+    required this.trackId,
   });
 
   @override
@@ -322,7 +326,21 @@ class _ExamResultScreenState extends State<ExamResultScreen>
                     width: double.infinity,
                     height: 48,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (widget.invalidated) {
+                          context.pushNamedAndRemoveUntil(
+                            AppRoutes.instructionspage,
+                            arguments: widget.trackId,
+                            predicate: (route) => false,
+                          );
+                          return;
+                        }
+
+                        context.pushNamed(
+                          AppRoutes.learningPlan,
+                          arguments: widget.trackId,
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2563EB),
                         foregroundColor: Colors.white,

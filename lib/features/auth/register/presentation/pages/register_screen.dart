@@ -50,7 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         listener: (context, state) => {
           if (state.isSuccess)
             {
-              context.pushNamed(AppRoutes.login),
+              context.pushReplacementNamed(AppRoutes.login),
               ToastMessage.toastMsg(locale.register_success),
             }
           else if (state.errorMessage != null)
