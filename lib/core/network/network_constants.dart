@@ -22,4 +22,6 @@ abstract class EndPoints {
   static const String examanswer = "exams/answer";
   static const String examquestions = "assessment/questions/Ai";
   static const String visionCheck = "exams/vision-check";
+  static const String advancedLearningPlan =
+      "https://mmm.nexxuus.site/learning/advanced_plan";
 }
