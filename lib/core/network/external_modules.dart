@@ -14,34 +14,37 @@ import 'network_constants.dart';
 @module
 abstract class ExternalModules {
   @lazySingleton
-  Dio provideDio() {
-    Dio dio = Dio();
- //   dio.options.baseUrl = NetworkConstants.baseUrl;
-     (dio.httpClientAdapter as DefaultHttpClientAdapter)
-      .onHttpClientCreate = (HttpClient client) {
-    client.badCertificateCallback =
-        (X509Certificate cert, String host, int port) => true;
+Dio provideDio(TokenInterceptor tokenInterceptor, PrettyDioLogger prettyDioLogger) {
+  Dio dio = Dio();
+
+  dio.options.baseUrl = NetworkConstants.baseUrl;
+   dio.options.connectTimeout = const Duration(seconds: 30);
+  dio.options.receiveTimeout = const Duration(seconds: 30);
+
+  
+  (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
+    final client = HttpClient();
+    client.badCertificateCallback = (cert, host, port) => true;
     return client;
   };
-   // dio.options.headers = {'Content-Type': 'application/json'};
-    dio.interceptors.add(getIt.get<PrettyDioLogger>());
-    dio.interceptors.add(getIt.get<TokenInterceptor>());
-    dio.interceptors.add(getIt.get<PrettyDioLogger>());
 
-    return dio;
-  }
+  dio.interceptors.add(prettyDioLogger);
+  dio.interceptors.add(tokenInterceptor);
 
-  @lazySingleton
-  PrettyDioLogger providePrettyDioLogger() {
-    return PrettyDioLogger(
-      requestHeader: true,
-      requestBody: true,
-      responseBody: true,
-      responseHeader: false,
-      error: true,
-      compact: true,
-    );
-  }
+  return dio;
+}
+
+@lazySingleton
+PrettyDioLogger providePrettyDioLogger() {
+  return PrettyDioLogger(
+    requestHeader: true,
+    requestBody: true,
+    responseBody: true,
+    responseHeader: false,
+    error: true,
+    compact: true,
+  );
+}
 
   @preResolve
   Future<SharedPreferences> get provideSharedPreferences async {

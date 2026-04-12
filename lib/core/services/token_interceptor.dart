@@ -2,8 +2,11 @@ import 'package:close_gap/core/network/network_constants.dart';
 import 'package:close_gap/core/services/token_service.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
+import '../network/network_constants.dart';
 
-@injectable
+@lazySingleton
 class TokenInterceptor extends Interceptor {
   final TokenService tokenService;
 
