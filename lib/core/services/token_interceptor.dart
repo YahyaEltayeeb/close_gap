@@ -1,22 +1,16 @@
 import 'package:dio/dio.dart';
-import 'package:close_gap/core/services/token_service.dart';
 import 'package:injectable/injectable.dart';
-import '../di/di.dart';
 import '../network/network_constants.dart';
 
-@injectable
+@lazySingleton
 class TokenInterceptor extends Interceptor {
-  final TokenService tokenService = getIt.get<TokenService>();
   @override
   void onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final String? token = await tokenService.getToken();
-    if (token != null) {
-      options.headers[NetworkConstants.authorization] =
-          "${NetworkConstants.bearer} $token";
-    }
+    options.headers[NetworkConstants.authorization] =
+         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NTk5ODQ1MSwianRpIjoiZDJlYmNiMGMtOWMxNy00ODBmLTllMTYtYzA2MmZmOTQzZDgzIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzU5OTg0NTEsImNzcmYiOiJjNTVmNDI5NC05MWJjLTQ4NzktYjFkYS1kZjljMmViYjBkYmEiLCJleHAiOjE3NzY2MDMyNTEsInJvbGUiOiJTVFVERU5UIn0.jcJwpk2vAJH6ll5D06Q5BErcNNZzmIHH_Cd9e1nRZ5E";;
     return super.onRequest(options, handler);
   }
 }

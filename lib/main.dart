@@ -1,9 +1,10 @@
+import 'package:close_gap/config/routing/app_routes.dart';
+import 'package:close_gap/config/routing/routing_generator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:close_gap/core/di/di.dart';
 import 'package:close_gap/core/general_cubit/general_state.dart';
 import 'package:close_gap/core/general_cubit/local_cubit.dart';
-import 'package:close_gap/features/cv_coach/presentation/pages/cv_coash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,10 +29,10 @@ class CloseGap extends StatelessWidget {
           // supportedLocales: AppLocalizations.supportedLocales,
           // locale: state.locale,
           // theme: state.isDark ? AppTheme.darkTheme : AppTheme.lightTheme,
-          // debugShowCheckedModeBanner: false,
-          // onGenerateRoute: RouteGenerator.getRoute,
-          // initialRoute: AppRoutes.appSections,
-          home:CvCoachScreen(),
+           debugShowCheckedModeBanner: false,
+          onGenerateRoute: RouteGenerator.getRoute,
+         initialRoute: AppRoutes.instructionspage,
+        //  home:InstructionsScreen(),
         );
       },
     );

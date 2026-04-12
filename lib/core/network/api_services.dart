@@ -1,3 +1,12 @@
+import 'package:close_gap/features/assessment/data/model/request/exam_answer_request.dart';
+import 'package:close_gap/features/assessment/data/model/request/exam_finish_request.dart';
+import 'package:close_gap/features/assessment/data/model/request/start_exam_request.dart';
+import 'package:close_gap/features/assessment/data/model/response/exam_answer_response.dart';
+import 'package:close_gap/features/assessment/data/model/response/exam_finish_response.dart';
+import 'package:close_gap/features/assessment/data/model/response/exam_questions_response.dart';
+import 'package:close_gap/features/assessment/data/model/response/start_exam_response.dart';
+import 'package:close_gap/features/exam_monitoring/data/models/request/vision_check_camera_request.dart';
+import 'package:close_gap/features/exam_monitoring/data/models/response/vision_check_camera_response.dart';
 import 'package:dio/dio.dart';
 import 'package:close_gap/core/network/network_constants.dart';
 import 'package:close_gap/features/auth/login/data/model/request/login_request_dto.dart';
@@ -24,4 +33,26 @@ abstract class ApiServices {
   @POST(EndPoints.cvCoash)
   @MultiPart()
   Future<CvAnalysisResponseDto> cvCoash(@Part(name: "file") MultipartFile file);
+  @POST(EndPoints.examstart)
+  Future<StartexamResponse> startExam(
+    @Body() StartExamRequest startExamRequest,
+  );
+  @POST(EndPoints.examfinish)
+  Future<ExamFinishResponse> finishExam(
+    @Body() ExamFinishRequest examFinishRequest,
+  );
+  @POST(EndPoints.examanswer)
+  Future<ExamAnswerResponse> answerExam(
+    @Body() ExamAnswerRequest examAnswerRequest,
+  );
+  @GET(EndPoints.examquestions)
+  Future<ExamquestionsResponse> getExamQuestions(
+    @Query('level') String level,
+    @Query('page') int page,
+    @Query('per_page') int perPage,
+  );
+  @POST(EndPoints.visionCheck)
+  Future<VisionCheckCameraResponse> visionCheck(
+    @Body() VisionCheckCameraRequest visionCheckCameraRequest,
+  );
 }
