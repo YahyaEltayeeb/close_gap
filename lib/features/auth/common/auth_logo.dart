@@ -21,8 +21,14 @@ class AuthLogo extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Theme.of(context).brightness == Brightness.light
-                    ? Image.asset(AppAssets.appLogoLight,)
-                    : Image.asset(AppAssets.appLogoDark),
+                    ? Image.asset(
+                        AppAssets.nexusLogo,
+                        width: context.width * 0.6,
+                      )
+                    : Image.asset(
+                        AppAssets.nexusLogo,
+                        width: context.width * 0.6,
+                      ),
                 Text(
                   pross,
                   style: Theme.of(

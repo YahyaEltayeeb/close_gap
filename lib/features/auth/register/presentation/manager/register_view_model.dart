@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:close_gap/core/network/api_results.dart';
+import 'package:close_gap/features/auth/register/domain/use_case/register_lookup_use_case.dart';
 import 'package:close_gap/features/auth/register/domain/entities/register_request_entity.dart';
 import 'package:close_gap/features/auth/register/domain/use_case/register_use_case.dart';
 import 'package:close_gap/features/auth/register/presentation/manager/register_event.dart';
@@ -8,8 +9,11 @@ import 'package:injectable/injectable.dart';
 
 @injectable
 class RegisterViewModel extends Cubit<RegisterState> {
-  RegisterViewModel(this._registerUseCase) : super(RegisterState());
+  RegisterViewModel(this._registerUseCase, this._registerLookupUseCase)
+    : super(RegisterState());
   final RegisterUseCase _registerUseCase;
+  final RegisterLookupUseCase _registerLookupUseCase;
+
   void doIntent(RegisterEvent event) {
     switch (event) {
       case RegisterSubmitEvent():
@@ -33,9 +37,112 @@ class RegisterViewModel extends Cubit<RegisterState> {
         emit(
           state.copyWith(
             isLoading: false,
-            errorMessage: result.failure.toString(),
+            errorMessage: result.failure,
           ),
         );
+    }
+  }
+
+  Future<void> loadInitialStudentData() async {
+    emit(
+      state.copyWith(
+        isLookupLoading: true,
+        lookupErrorMessage: null,
+        faculties: [],
+        departments: [],
+        semesters: [],
+      ),
+    );
+
+    final universitiesResult = await _registerLookupUseCase.getUniversities();
+    final tracksResult = await _registerLookupUseCase.getTracks();
+
+    switch ((universitiesResult, tracksResult)) {
+      case (
+        ApiSuccessResult(data: final universities),
+        ApiSuccessResult(data: final tracks),
+      ):
+        emit(
+          state.copyWith(
+            isLookupLoading: false,
+            universities: universities,
+            tracks: tracks,
+          ),
+        );
+      case (ApiErrorResult(failure: final failure), _):
+        emit(state.copyWith(isLookupLoading: false, lookupErrorMessage: failure));
+      case (_, ApiErrorResult(failure: final failure)):
+        emit(state.copyWith(isLookupLoading: false, lookupErrorMessage: failure));
+    }
+  }
+
+  Future<void> loadFaculties(int universityId) async {
+    emit(
+      state.copyWith(
+        isLookupLoading: true,
+        lookupErrorMessage: null,
+        faculties: [],
+        departments: [],
+        semesters: [],
+      ),
+    );
+
+    final result = await _registerLookupUseCase.getFaculties(universityId);
+    switch (result) {
+      case ApiSuccessResult(data: final data):
+        emit(
+          state.copyWith(
+            isLookupLoading: false,
+            faculties: data,
+            departments: [],
+            semesters: [],
+          ),
+        );
+      case ApiErrorResult(failure: final failure):
+        emit(state.copyWith(isLookupLoading: false, lookupErrorMessage: failure));
+    }
+  }
+
+  Future<void> loadDepartments(int facultyId) async {
+    emit(
+      state.copyWith(
+        isLookupLoading: true,
+        lookupErrorMessage: null,
+        departments: [],
+        semesters: [],
+      ),
+    );
+
+    final result = await _registerLookupUseCase.getDepartments(facultyId);
+    switch (result) {
+      case ApiSuccessResult(data: final data):
+        emit(
+          state.copyWith(
+            isLookupLoading: false,
+            departments: data,
+            semesters: [],
+          ),
+        );
+      case ApiErrorResult(failure: final failure):
+        emit(state.copyWith(isLookupLoading: false, lookupErrorMessage: failure));
+    }
+  }
+
+  Future<void> loadSemesters(int departmentId) async {
+    emit(
+      state.copyWith(
+        isLookupLoading: true,
+        lookupErrorMessage: null,
+        semesters: [],
+      ),
+    );
+
+    final result = await _registerLookupUseCase.getAvailableSemesters(1);
+    switch (result) {
+      case ApiSuccessResult(data: final data):
+        emit(state.copyWith(isLookupLoading: false, semesters: data));
+      case ApiErrorResult(failure: final failure):
+        emit(state.copyWith(isLookupLoading: false, lookupErrorMessage: failure));
     }
   }
 }

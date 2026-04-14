@@ -29,16 +29,29 @@ Future<ApiResult<T>> safeApiCall<T>(Future<T> Function() apiCall) async {
     final result = await apiCall();
     return ApiSuccessResult<T>(data: result);
   } on DioException catch (dioError) {
-     print("REAL ERROR => ${dioError.error}");
+    print("REAL ERROR => ${dioError.error}");
     print("TYPE => ${dioError.type}");
+    final responseData = dioError.response?.data;
+    String? serverMessage;
+
+    if (responseData is Map<String, dynamic>) {
+      serverMessage =
+          responseData['error']?.toString() ??
+          responseData['message']?.toString() ??
+          responseData['detail']?.toString();
+    } else if (responseData is String && responseData.isNotEmpty) {
+      serverMessage = responseData;
+    }
+
     return ApiErrorResult<T>(
-      failure: dioError.error?.toString() ?? dioError.message ?? "Dio error"
-      // ServerFailure.fromDioError(dioException: dioError),
+      failure:
+          serverMessage ??
+          dioError.error?.toString() ??
+          dioError.message ??
+          "Dio error",
     );
   } catch (error) {
-    return ApiErrorResult<T>(failure:error.toString()
-    // Failure(errorMessage: error.toString())
-    );
+    return ApiErrorResult<T>(failure: error.toString());
   }
 }
 

@@ -35,7 +35,7 @@ class VisionCheckCubit extends Cubit<VisionCheckState> {
     _examId = examId;
     emit(VisionCheckRunning());
 
-    _timer = Timer.periodic(const Duration(seconds: 10), (timer) async {
+    _timer = Timer.periodic(const Duration(minutes: 2), (timer) async {
       // ✅ تأكد إن الـ cubit لسه شغال
       if (_isDisposed || isClosed) {
         timer.cancel();

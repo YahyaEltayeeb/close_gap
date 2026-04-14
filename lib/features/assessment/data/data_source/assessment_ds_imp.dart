@@ -35,9 +35,7 @@ class AssessmentDsImp implements AssessmentDs {
     required int perPage,
   }) {
     return _apiServices.getExamQuestions( 
-      level,
-      page,
-      perPage,
+     
     );
   }
 

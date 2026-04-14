@@ -35,6 +35,7 @@ class CloseGap extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           onGenerateRoute: RouteGenerator.getRoute,
           initialRoute: AppRoutes.register,
+
           // home: AdvancedLearningPlanScreen(),
         );
       },

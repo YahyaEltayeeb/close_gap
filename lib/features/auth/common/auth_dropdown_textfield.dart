@@ -40,6 +40,16 @@ class _AuthDropdownTextfieldState extends State<AuthDropdownTextfield> {
   }
 
   @override
+  void didUpdateWidget(covariant AuthDropdownTextfield oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != oldWidget.value) {
+      selectedValue = widget.value;
+    } else if (selectedValue != null && !widget.items.contains(selectedValue)) {
+      selectedValue = null;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final width = context.width;
     final height = context.height;

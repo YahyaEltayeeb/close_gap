@@ -1,3 +1,5 @@
+import 'package:close_gap/config/routing/app_routes.dart';
+import 'package:close_gap/config/routing/routing_extensions.dart';
 import 'package:close_gap/config/theme/colors.dart';
 import 'package:close_gap/core/di/di.dart';
 import 'package:close_gap/features/learning/advanced_plan/domain/entities/advanced_learning_plan_entity.dart';
@@ -84,6 +86,27 @@ class _AdvancedLearningPlanView extends StatelessWidget {
                         initiallyExpanded: week.week == 1,
                       ),
                     ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        context.pushNamedAndRemoveUntil(
+                          AppRoutes.appSections,
+                          predicate: (route) => false,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.lightPrimary,
+                        foregroundColor: AppColors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                      ),
+                      child: const Text('Go to home'),
+                    ),
+                  ),
                 ],
               ),
             );

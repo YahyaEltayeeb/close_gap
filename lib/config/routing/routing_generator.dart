@@ -8,6 +8,7 @@ import 'package:close_gap/features/assessment/presentation/pages/exam_result_scr
 import 'package:close_gap/features/assessment/presentation/pages/exam_screen.dart';
 import 'package:close_gap/features/assessment/presentation/pages/inesrtrutions_screen.dart';
 import 'package:close_gap/features/auth/login/presentation/pages/login_screen.dart';
+import 'package:close_gap/features/auth/register/domain/entities/register_request_entity.dart';
 import 'package:close_gap/features/auth/register/presentation/pages/register_screen.dart';
 import 'package:close_gap/features/auth/register/presentation/pages/stu_register_screen.dart';
 import 'package:close_gap/features/get_jobs/presentation/page/get_jobs_screen.dart';
@@ -27,16 +28,20 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const AppSection());
       case AppRoutes.home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
+
       case AppRoutes.register:
-        return MaterialPageRoute(builder: (_) => const RegisterScreen());
+        return MaterialPageRoute(builder: (context) => const RegisterScreen());
       case AppRoutes.stuRegister:
-        return MaterialPageRoute(builder: (_) => const StuRegisterScreen());
+        final requestEntity = settings.arguments as RegisterRequestEntity;
+        return MaterialPageRoute(
+          builder: (context) => StuRegisterScreen(requestEntity: requestEntity),
+        );
       case AppRoutes.getJobs:
         return MaterialPageRoute(builder: (_) => GetJobsScreen());
       case AppRoutes.instructionspage:
         final trackId = (settings.arguments as int?) ?? 1;
         return MaterialPageRoute(
-          builder: (_) => InstructionsScreen(trackId: trackId),
+          builder: (_) => InstructionsScreen(trackId: 3),
         );
       case AppRoutes.permissionpage:
         final trackId = settings.arguments as int;

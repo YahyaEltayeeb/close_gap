@@ -19,10 +19,7 @@ class JobsTabBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
-          bottom: BorderSide(
-            color: const Color(0xFFE0E0E0),
-            width: 1,
-          ),
+          bottom: BorderSide(color: const Color(0xFFE0E0E0), width: 1),
         ),
       ),
       child: Row(

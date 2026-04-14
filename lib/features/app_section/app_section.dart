@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:close_gap/core/extensions/extensions.dart';
 import 'package:close_gap/features/app_section/widget/custom_drawer.dart';
 import 'package:close_gap/features/auth/profile/presentation/pages/profile_screen.dart';
-import 'package:close_gap/features/courses/presentation/pages/courses_screen.dart';
+import 'package:close_gap/features/cv_coach/presentation/pages/cv_coash_page.dart';
 import 'package:close_gap/features/home/presentation/pages/home_screen.dart';
 
 class AppSection extends StatefulWidget {
@@ -20,8 +20,8 @@ class _AppSectionState extends State<AppSection> {
 
   final List<Widget> pages = const [
     HomeScreen(),
-    CoursesScreen(),
-   GetJobsScreen(),
+    CvCoachScreen(),
+    GetJobsScreen(),
     ProfileScreen(),
   ];
 
@@ -56,8 +56,8 @@ class _AppSectionState extends State<AppSection> {
             label: locale.home,
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.play_circle_outline_rounded),
-            label: locale.courses,
+            icon: const Icon(Icons.description_outlined),
+            label: 'CV Coach',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.work_outline),
