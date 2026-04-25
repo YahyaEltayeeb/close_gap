@@ -10,4 +10,5 @@ abstract class AppRoutes {
   static const String examScreen = '/examScreen';
   static const String examResult = '/exam-result';
   static const String learningPlan = '/learning-plan';
+  static const String academicCourse = '/academic-course';
 }

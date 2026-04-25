@@ -34,7 +34,7 @@ class CloseGap extends StatelessWidget {
           theme: state.isDark ? AppTheme.darkTheme : AppTheme.lightTheme,
           debugShowCheckedModeBanner: false,
           onGenerateRoute: RouteGenerator.getRoute,
-          initialRoute: AppRoutes.register,
+          initialRoute: AppRoutes.academicCourse,
 
           // home: AdvancedLearningPlanScreen(),
         );

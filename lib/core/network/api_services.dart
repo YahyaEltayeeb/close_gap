@@ -1,3 +1,10 @@
+import 'package:close_gap/features/academic_course/data/models/request/submission_exam_request.dart';
+import 'package:close_gap/features/academic_course/data/models/response/academic_course_dto.dart';
+import 'package:close_gap/features/academic_course/data/models/response/academic_exam_results_dto.dart';
+import 'package:close_gap/features/academic_course/data/models/response/explanation_dto.dart';
+import 'package:close_gap/features/academic_course/data/models/response/publish_exam_dto.dart';
+import 'package:close_gap/features/academic_course/data/models/response/start_exam_dto.dart';
+import 'package:close_gap/features/academic_course/data/models/response/submission_exam_response_dto.dart';
 import 'package:close_gap/features/get_jobs/data/models/response_get_jobs_model_dto.dart';
 import 'package:close_gap/features/get_linkedin_posts/data/models/response_linkedin_posts_model_dto.dart';
 import 'package:close_gap/features/assessment/data/model/request/exam_answer_request.dart';
@@ -86,9 +93,7 @@ abstract class ApiServices {
     @Body() ExamAnswerRequest examAnswerRequest,
   );
   @GET(EndPoints.examquestions)
-  Future<ExamquestionsResponse> getExamQuestions(
-   
-  );
+  Future<ExamquestionsResponse> getExamQuestions();
   @POST(EndPoints.visionCheck)
   Future<VisionCheckCameraResponse> visionCheck(
     @Body() VisionCheckCameraRequest visionCheckCameraRequest,
@@ -97,4 +102,23 @@ abstract class ApiServices {
   Future<AdvancedLearningPlanResponseDto> getAdvancedLearningPlan(
     @Body() AdvancedLearningPlanRequestDto requestDto,
   );
+  @GET(EndPoints.academicCourses)
+  Future<List<AcademicCourseDto>> getAcademicCourses(
+    @Path("semester") int semester,
+  );
+  @GET(EndPoints.academicExplanation)
+  Future<List<ExplanationDto>> getAcademicCourseExplanation(
+    @Path("courseId") int courseId,
+  );
+  @GET(EndPoints.academicpublishedexam)
+  Future<List<PublishExamDto>> getAcademicPublishedExam();
+  @POST(EndPoints.academicStartExam)
+  Future<StartExamDto> startAcademicExam(@Path("exam_id") int examId);
+  @POST(EndPoints.academicSubmitExam)
+  Future<SubmissionExamResponseDto> submitAcademicExam(
+    @Path("exam_id") int examId,
+    @Body() SubmissionExamRequest submissionExamRequest,
+  );
+  @GET(EndPoints.academicExamResult)
+  Future<List<AcademicExamResultsDto>> getAcademicExamResult();
 }

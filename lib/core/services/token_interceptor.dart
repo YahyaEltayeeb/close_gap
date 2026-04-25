@@ -16,14 +16,16 @@ class TokenInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final String? token = await tokenService.getToken();
-     
-  print('🔑 TOKEN FROM STORAGE: $token'); // ← حطه هنا
-  print('🔑 IS TOKEN SAVED: ${tokenService.isTokenSaved}');
+    final String? token =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTc3NjgwNzQ0MCwianRpIjoiNzdjNTk5NmYtYTI1YS00ZjQwLTllYjYtNmQ3MzM2ZjJhMmRiIiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjEiLCJuYmYiOjE3NzY4MDc0NDAsImNzcmYiOiI3NGZkMTJiMC0yNjE2LTQ4ZTQtYTAxOS1mOTY4NTI0NWQ4NWMiLCJleHAiOjE3Nzc0MTIyNDAsInJvbGUiOiJTVFVERU5UIn0.H4TXV8lJnSN7Z9QTwNnkevtwUT2Y1nwRi48BFhrh0Rw';
+    // await tokenService.getToken();
+
+    print('🔑 TOKEN FROM STORAGE: $token'); // ← حطه هنا
+    print('🔑 IS TOKEN SAVED: ${tokenService.isTokenSaved}');
     if (token != null) {
       options.headers[NetworkConstants.authorization] =
           "${NetworkConstants.bearer} $token";
     }
-    return  handler.next(options);
+    return handler.next(options);
   }
 }

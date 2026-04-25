@@ -1,5 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:close_gap/core/di/di.dart';
+import 'package:close_gap/features/academic_course/presentation/manager/academic_course_cubit.dart';
+import 'package:close_gap/features/academic_course/presentation/pages/academic_course_screen.dart';
 import 'package:close_gap/features/app_section/app_section.dart';
 import 'package:close_gap/features/assessment/domain/entities/exam_finish_entity.dart';
 import 'package:close_gap/features/assessment/presentation/manager/exam/exam_cubit.dart';
@@ -74,6 +76,13 @@ class RouteGenerator {
         final trackId = (settings.arguments as int?) ?? 1;
         return MaterialPageRoute(
           builder: (_) => AdvancedLearningPlanScreen(trackId: trackId),
+        );
+      case AppRoutes.academicCourse:
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => getIt<AcademicCourseCubit>(),
+            child: const AcademicCoursesScreen(),
+          ),
         );
       default:
         return unDefinedRoute();
