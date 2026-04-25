@@ -89,6 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           controller: _usernameController,
                           icon: Icons.person,
                           label: locale.username,
+                          onChanged: (_) =>
+                              context.read<LoginViewModel>().clearFeedback(),
                           validator: (value) =>
                               Validations.validateName(context, value),
                         ),
@@ -99,6 +101,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           label: locale.password,
                           isPassword: true,
                           showForgotPassword: true,
+                          onChanged: (_) =>
+                              context.read<LoginViewModel>().clearFeedback(),
                           validator: (value) =>
                               Validations.validatePassword(context, value),
                         ),

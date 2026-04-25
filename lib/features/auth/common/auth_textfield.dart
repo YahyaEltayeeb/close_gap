@@ -10,6 +10,7 @@ class AuthTextField extends StatefulWidget {
   final bool showForgotPassword;
   final String forgotText;
   final VoidCallback? onForgotTap;
+  final ValueChanged<String>? onChanged;
   final String? Function(String?)? validator;
 
   const AuthTextField({
@@ -21,6 +22,7 @@ class AuthTextField extends StatefulWidget {
     this.showForgotPassword = false,
     this.forgotText = "Forgot Password?",
     this.onForgotTap,
+    this.onChanged,
     required this.validator,
   });
 
@@ -44,6 +46,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
             obscureText: widget.isPassword ? _obscure : false,
             style: context.textTheme.titleMedium,
             validator: widget.validator,
+            onChanged: widget.onChanged,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             decoration: InputDecoration(
               labelText: widget.label,

@@ -16,13 +16,17 @@ class LoginState {
     bool? isSuccess,
     UserModelLoginEntity? userModelLoginEntity,
     bool? isLoading,
-    String? errorMessage,
+    Object? errorMessage = _sentinel,
   }) {
     return LoginState(
       isSuccess: isSuccess ?? this.isSuccess,
       isLoading: isLoading ?? this.isLoading,
-      errorMessage: errorMessage ?? this.errorMessage,
+      errorMessage: errorMessage == _sentinel
+          ? this.errorMessage
+          : errorMessage as String?,
       userModelLoginEntity: userModelLoginEntity ?? this.userModelLoginEntity,
     );
   }
 }
+
+const Object _sentinel = Object();

@@ -14,6 +14,11 @@ class RegisterViewModel extends Cubit<RegisterState> {
   final RegisterUseCase _registerUseCase;
   final RegisterLookupUseCase _registerLookupUseCase;
 
+  void clearSubmissionFeedback() {
+    if (state.errorMessage == null && !state.isSuccess) return;
+    emit(state.copyWith(errorMessage: null, isSuccess: false));
+  }
+
   void doIntent(RegisterEvent event) {
     switch (event) {
       case RegisterSubmitEvent():
@@ -29,6 +34,7 @@ class RegisterViewModel extends Cubit<RegisterState> {
         emit(
           state.copyWith(
             isLoading: false,
+            errorMessage: null,
             isSuccess: true,
             userEntity: result.data,
           ),

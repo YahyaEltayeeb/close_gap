@@ -10,8 +10,13 @@ class LoginViewModel extends Cubit<LoginState> {
   LoginViewModel(this._loginUseCase) : super(LoginState());
   final LoginUseCase _loginUseCase;
 
+  void clearFeedback() {
+    if (state.errorMessage == null && !state.isSuccess) return;
+    emit(state.copyWith(errorMessage: null, isSuccess: false));
+  }
+
   void loginUser(LoginRequestEntity loginRequestEntity) async {
-    emit(state.copyWith(isLoading: true));
+    emit(state.copyWith(isLoading: true, errorMessage: null, isSuccess: false));
     var result = await _loginUseCase(loginRequestEntity);
     switch (result) {
       case ApiSuccessResult():
@@ -19,11 +24,18 @@ class LoginViewModel extends Cubit<LoginState> {
           state.copyWith(
             isLoading: false,
             userModelLoginEntity: result.data,
+            errorMessage: null,
             isSuccess: true,
           ),
         );
       case ApiErrorResult():
-        emit(state.copyWith(isLoading: false, errorMessage: result.failure));
+        emit(
+          state.copyWith(
+            isLoading: false,
+            isSuccess: false,
+            errorMessage: result.failure,
+          ),
+        );
     }
   }
 }

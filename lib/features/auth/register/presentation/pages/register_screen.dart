@@ -82,6 +82,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           controller: nameController,
                           icon: Icons.person,
                           label: locale.name,
+                          onChanged: (_) => context
+                              .read<RegisterViewModel>()
+                              .clearSubmissionFeedback(),
                           validator: (value) =>
                               Validations.validateName(context, value),
                         ),
@@ -90,6 +93,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           controller: emailController,
                           icon: Icons.email,
                           label: locale.email,
+                          onChanged: (_) => context
+                              .read<RegisterViewModel>()
+                              .clearSubmissionFeedback(),
                           validator: (value) =>
                               Validations.validateEmail(context, value),
                         ),
@@ -100,6 +106,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           label: locale.password,
                           isPassword: true,
                           showForgotPassword: false,
+                          onChanged: (_) => context
+                              .read<RegisterViewModel>()
+                              .clearSubmissionFeedback(),
                           validator: (value) =>
                               Validations.validatePassword(context, value),
                         ),
@@ -110,6 +119,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           label: locale.confirm_password,
                           isPassword: true,
                           showForgotPassword: false,
+                          onChanged: (_) => context
+                              .read<RegisterViewModel>()
+                              .clearSubmissionFeedback(),
                           validator: (value) =>
                               Validations.validateConfirmPassword(
                                 context,
@@ -123,6 +135,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               ? null
                               : registerAsController.text,
                           onChanged: (value) {
+                            context
+                                .read<RegisterViewModel>()
+                                .clearSubmissionFeedback();
                             setState(() {
                               registerAsController.text = value ?? '';
                               if (registerAsController.text != locale.teacher) {
@@ -145,6 +160,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             icon: Icons.lock_outline,
                             label: locale.teacher_key,
                             showForgotPassword: false,
+                            onChanged: (_) => context
+                                .read<RegisterViewModel>()
+                                .clearSubmissionFeedback(),
                             validator: (value) {
                               if (registerAsController.text != locale.teacher) {
                                 return null;

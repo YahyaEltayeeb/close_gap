@@ -192,6 +192,9 @@ class _StuRegisterViewState extends State<_StuRegisterView> {
                       showForgotPassword: false,
                       forgotText: '',
                       onChanged: (value) {
+                        context
+                            .read<RegisterViewModel>()
+                            .clearSubmissionFeedback();
                         final selected = _findAcademicByName(
                           state.universities,
                           value,
@@ -223,6 +226,9 @@ class _StuRegisterViewState extends State<_StuRegisterView> {
                       showForgotPassword: false,
                       forgotText: '',
                       onChanged: (value) {
+                        context
+                            .read<RegisterViewModel>()
+                            .clearSubmissionFeedback();
                         final selected = _findAcademicByName(
                           state.faculties,
                           value,
@@ -253,6 +259,9 @@ class _StuRegisterViewState extends State<_StuRegisterView> {
                       showForgotPassword: false,
                       forgotText: '',
                       onChanged: (value) {
+                        context
+                            .read<RegisterViewModel>()
+                            .clearSubmissionFeedback();
                         final selected = _findAcademicByName(
                           state.departments,
                           value,
@@ -282,6 +291,9 @@ class _StuRegisterViewState extends State<_StuRegisterView> {
                       showForgotPassword: false,
                       forgotText: '',
                       onChanged: (value) {
+                        context
+                            .read<RegisterViewModel>()
+                            .clearSubmissionFeedback();
                         setState(() {
                           _selectedYear = int.tryParse(value ?? '');
                           _selectedSemester = null;
@@ -301,6 +313,9 @@ class _StuRegisterViewState extends State<_StuRegisterView> {
                       showForgotPassword: false,
                       forgotText: '',
                       onChanged: (value) {
+                        context
+                            .read<RegisterViewModel>()
+                            .clearSubmissionFeedback();
                         final selected = _findSemesterByLabel(
                           filteredSemesters,
                           value,
@@ -321,6 +336,9 @@ class _StuRegisterViewState extends State<_StuRegisterView> {
                       showForgotPassword: false,
                       forgotText: '',
                       onChanged: (value) {
+                        context
+                            .read<RegisterViewModel>()
+                            .clearSubmissionFeedback();
                         final selected = _findAcademicByName(
                           state.tracks,
                           value,
