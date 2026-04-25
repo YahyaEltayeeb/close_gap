@@ -1,3 +1,4 @@
+import 'package:close_gap/config/routing/app_routes.dart';
 import 'package:close_gap/core/di/di.dart';
 import 'package:close_gap/core/services/token_service.dart';
 import 'package:close_gap/features/academic_course/presentation/manager/academic_course_cubit.dart';
@@ -45,7 +46,14 @@ class _AcademicCoursesScreenState extends State<AcademicCoursesScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: const BackButton(color: Color(0xFF1A1A2E)),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFF1A1A2E)),
+          onPressed: () {
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil(AppRoutes.appSections, (route) => false);
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.search, color: Color(0xFF1A1A2E)),
