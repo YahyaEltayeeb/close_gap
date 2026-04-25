@@ -37,10 +37,14 @@ class _TeacherExamResultsView extends StatefulWidget {
 
 class _TeacherExamResultsViewState extends State<_TeacherExamResultsView> {
   final Map<int, TextEditingController> _feedbackControllers = {};
+  final Map<int, TextEditingController> _scoreControllers = {};
 
   @override
   void dispose() {
     for (final controller in _feedbackControllers.values) {
+      controller.dispose();
+    }
+    for (final controller in _scoreControllers.values) {
       controller.dispose();
     }
     super.dispose();
@@ -108,6 +112,8 @@ class _TeacherExamResultsViewState extends State<_TeacherExamResultsView> {
                                         state.isSubmittingGrades,
                                     feedbackControllerForAnswer:
                                         _feedbackControllerForAnswer,
+                                    scoreControllerForAnswer:
+                                        _scoreControllerForAnswer,
                                     onToggle: () => context
                                         .read<TeacherExamResultsCubit>()
                                         .toggleSubmission(result.submissionId),
@@ -178,6 +184,21 @@ class _TeacherExamResultsViewState extends State<_TeacherExamResultsView> {
     });
   }
 
+  TextEditingController _scoreControllerForAnswer(
+    TeacherExamSubmissionAnswerEntity? answer,
+  ) {
+    final answerId = answer?.answerId ?? -1;
+    return _scoreControllers.putIfAbsent(answerId, () {
+      final score = answer?.score;
+      final initialText = score == null
+          ? ''
+          : score == score.roundToDouble()
+          ? score.toStringAsFixed(0)
+          : score.toStringAsFixed(1);
+      return TextEditingController(text: initialText);
+    });
+  }
+
   void _submitGrades(
     BuildContext context,
     int examId,
@@ -199,6 +220,36 @@ class _TeacherExamResultsViewState extends State<_TeacherExamResultsView> {
       );
       final questionLabel =
           question == null ? 'this question' : 'question ${question.order + 1}';
+      final scoreText = _scoreControllerForAnswer(answer).text.trim();
+      if (scoreText.isEmpty) {
+        ToastMessage.toastMsg(
+          'Please enter score for $questionLabel before submitting',
+          backgroundColor: AppColors.red,
+        );
+        return;
+      }
+      final score = double.tryParse(scoreText);
+      if (score == null) {
+        ToastMessage.toastMsg(
+          'Please enter a valid numeric score for $questionLabel',
+          backgroundColor: AppColors.red,
+        );
+        return;
+      }
+      if (score < 0) {
+        ToastMessage.toastMsg(
+          'Score for $questionLabel cannot be less than 0',
+          backgroundColor: AppColors.red,
+        );
+        return;
+      }
+      if (question != null && score > question.marks) {
+        ToastMessage.toastMsg(
+          'Score for $questionLabel cannot exceed ${_formatScore(question.marks)}',
+          backgroundColor: AppColors.red,
+        );
+        return;
+      }
       final feedback = _feedbackControllerForAnswer(answer).text.trim();
       if (feedback.isEmpty) {
         ToastMessage.toastMsg(
@@ -210,7 +261,7 @@ class _TeacherExamResultsViewState extends State<_TeacherExamResultsView> {
 
       grades.add((
         answerId: answer.answerId,
-        score: null,
+        score: score,
         feedback: feedback,
       ));
     }
@@ -416,6 +467,7 @@ class _SubmissionTile extends StatelessWidget {
     required this.currentQuestionIndex,
     required this.isSubmittingGrades,
     required this.feedbackControllerForAnswer,
+    required this.scoreControllerForAnswer,
     required this.onToggle,
     required this.onNextQuestion,
     required this.onPreviousQuestion,
@@ -431,6 +483,8 @@ class _SubmissionTile extends StatelessWidget {
   final bool isSubmittingGrades;
   final TextEditingController Function(TeacherExamSubmissionAnswerEntity?)
   feedbackControllerForAnswer;
+  final TextEditingController Function(TeacherExamSubmissionAnswerEntity?)
+  scoreControllerForAnswer;
   final VoidCallback onToggle;
   final VoidCallback onNextQuestion;
   final VoidCallback onPreviousQuestion;
@@ -569,6 +623,7 @@ class _SubmissionTile extends StatelessWidget {
                     questionNumber: question.order + 1,
                     question: question,
                     answer: answer,
+                    scoreController: scoreControllerForAnswer(answer),
                     feedbackController: feedbackControllerForAnswer(answer),
                   ),
                   const SizedBox(height: 12),
@@ -680,12 +735,14 @@ class _QuestionGradeCard extends StatelessWidget {
     required this.questionNumber,
     required this.question,
     required this.answer,
+    required this.scoreController,
     required this.feedbackController,
   });
 
   final int questionNumber;
   final TeacherExamQuestionEntity question;
   final TeacherExamSubmissionAnswerEntity? answer;
+  final TextEditingController scoreController;
   final TextEditingController feedbackController;
 
   @override
@@ -749,6 +806,17 @@ class _QuestionGradeCard extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           _InfoField(text: studentAnswerText),
+          const SizedBox(height: 12),
+          Text(
+            'Score (max ${question.marks == question.marks.roundToDouble() ? question.marks.toStringAsFixed(0) : question.marks.toStringAsFixed(1)})',
+            style: const TextStyle(fontWeight: FontWeight.w800),
+          ),
+          const SizedBox(height: 6),
+          _EditableField(
+            controller: scoreController,
+            hint: 'Enter score',
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+          ),
           const SizedBox(height: 12),
           const Text(
             'Feedback',
@@ -849,17 +917,22 @@ class _AnswerReviewCard extends StatelessWidget {
 }
 
 class _EditableField extends StatelessWidget {
-  const _EditableField({required this.controller, required this.hint});
+  const _EditableField({
+    required this.controller,
+    required this.hint,
+    this.keyboardType = TextInputType.text,
+  });
 
   final TextEditingController controller;
   final String hint;
+  final TextInputType keyboardType;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
       maxLines: hint == 'Feedback is required' ? 2 : 1,
-      keyboardType: TextInputType.text,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         hintText: hint,
         filled: true,

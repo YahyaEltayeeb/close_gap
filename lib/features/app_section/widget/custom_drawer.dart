@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:close_gap/core/extensions/extensions.dart';
 import 'package:close_gap/core/helpers/spacing.dart';
 import 'package:close_gap/features/app_section/widget/all_action_widget.dart';
-import 'package:close_gap/features/app_section/widget/custom_info_widget.dart';
 import 'package:close_gap/features/app_section/widget/custom_setting_widget.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -31,7 +30,6 @@ class CustomDrawer extends StatelessWidget {
             child: Column(
               children: [
                 verticalSpace(4),
-                const CustomInfoWidget(),
                 const SizedBox(height: 12),
                 Expanded(
                   child: CustomAllActionWidget(

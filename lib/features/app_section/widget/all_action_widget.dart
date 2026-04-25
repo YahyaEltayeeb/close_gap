@@ -46,12 +46,6 @@ class CustomAllActionWidget extends StatelessWidget {
               onTap: () => _selectTab(context, 1),
             ),
             CustomRowAction(
-              title: 'LinkedIn',
-              icon: FontAwesomeIcons.linkedin,
-              selected: currentIndex == 2,
-              onTap: () => _selectTab(context, 2),
-            ),
-            CustomRowAction(
               title: locale.profile,
               icon: Icons.person_outline,
               selected: currentIndex == 3,
@@ -113,14 +107,6 @@ class CustomAllActionWidget extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).pushNamed(AppRoutes.projects);
-              },
-            ),
-            CustomRowAction(
-              title: 'LinkedIn',
-              icon: Icons.work_outline_rounded,
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pushNamed(AppRoutes.getJobs);
               },
             ),
           ],

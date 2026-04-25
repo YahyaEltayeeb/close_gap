@@ -11,10 +11,10 @@ import 'package:close_gap/features/assessment/presentation/pages/exam_result_scr
 import 'package:close_gap/features/assessment/presentation/pages/exam_screen.dart';
 import 'package:close_gap/features/assessment/presentation/pages/inesrtrutions_screen.dart';
 import 'package:close_gap/features/auth/login/presentation/pages/login_screen.dart';
-import 'package:close_gap/features/auth/profile/presentation/pages/profile_screen.dart';
 import 'package:close_gap/features/certificates/presentation/pages/certificates_screen.dart';
 import 'package:close_gap/features/experience/presentation/pages/experience_screen.dart';
 import 'package:close_gap/features/notifications/presentation/pages/notifications_screen.dart';
+import 'package:close_gap/features/projects/presentation/pages/projects_screen.dart';
 import 'package:close_gap/features/auth/login/domain/entities/user_model_login_entity.dart';
 import 'package:close_gap/features/auth/register/domain/entities/register_request_entity.dart';
 import 'package:close_gap/features/auth/register/presentation/pages/register_screen.dart';
@@ -148,7 +148,7 @@ class RouteGenerator {
           builder: (_) => AdvancedLearningPlanScreen(trackId: trackId),
         );
       case AppRoutes.projects:
-        return MaterialPageRoute(builder: (_) => const ProfileScreen());
+        return MaterialPageRoute(builder: (_) => const ProjectsScreen());
       case AppRoutes.experience:
         return MaterialPageRoute(builder: (_) => const ExperienceScreen());
       case AppRoutes.certificates:

@@ -5,6 +5,7 @@ import 'package:close_gap/features/generate_cv/domain/entities/generate_cv_reque
 import 'package:close_gap/features/generate_cv/presentation/manager/generate_cv_cubit.dart';
 import 'package:close_gap/features/generate_cv/presentation/manager/generate_cv_state.dart';
 import 'package:close_gap/features/generate_cv/presentation/manager/helper_function.dart';
+import 'package:close_gap/features/generate_cv/presentation/pages/cv_ready_screen.dart';
 import 'package:close_gap/features/generate_cv/presentation/pages/pdf_viewer_screen.dart';
 import 'package:close_gap/features/generate_cv/presentation/widgets/cv_multi_select_sheet.dart';
 import 'package:close_gap/features/generate_cv/presentation/widgets/cv_status_header.dart';
@@ -175,6 +176,14 @@ class _GenerateCvViewState extends State<_GenerateCvView> {
       ),
       body: BlocConsumer<GenerateCvCubit, GenerateCvState>(
         listener: (context, state) {
+          if (state is GenerateCvSuccess) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => CvReadyScreen(pdfBytes: state.pdfBytes),
+              ),
+            );
+          }
           if (state is GenerateCvError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -211,21 +220,7 @@ class _GenerateCvViewState extends State<_GenerateCvView> {
                     const SizedBox(height: 16),
                   ],
                   _buildForm(context, state),
-                  if (state is GenerateCvSuccess) ...[
-                    const SizedBox(height: 24),
-                    CvReadyCard(
-                      onView: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                PdfViewerScreen(pdfBytes: state.pdfBytes),
-                          ),
-                        );
-                      },
-                      onDownloadPdf: () => saveAndOpenPdf(state.pdfBytes),
-                    ),
-                  ] else if (cubit.cachedPdf != null) ...[
+                  if (cubit.cachedPdf != null && state is! GenerateCvSuccess) ...[
                     const SizedBox(height: 24),
                     CvReadyCard(
                       onView: () {
