@@ -14,12 +14,10 @@ class TokenInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    final baseHost = Uri.parse(NetworkConstants.baseUrl).host;
-    if (options.uri.host != baseHost) {
-      return handler.next(options);
-    }
-
     final String? token = await tokenService.getToken();
+
+    print('🔑 TOKEN FROM STORAGE: $token'); // ← حطه هنا
+    print('🔑 IS TOKEN SAVED: ${tokenService.isTokenSaved}');
     if (token != null) {
       options.headers[NetworkConstants.authorization] =
           "${NetworkConstants.bearer} $token";

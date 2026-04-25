@@ -74,6 +74,14 @@ class CustomAllActionWidget extends StatelessWidget {
               },
             ),
             CustomRowAction(
+              title: 'Academic Courses',
+              icon: Icons.school_outlined,
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(AppRoutes.academicCourse);
+              },
+            ),
+            CustomRowAction(
               title: locale.cV_coach,
               icon: Icons.description_outlined,
               onTap: () {

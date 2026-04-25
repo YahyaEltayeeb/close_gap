@@ -21,6 +21,8 @@ class UserModelLoginDto {
   final int? year;
   @JsonKey(name: "current_semester")
   final int? currentSemester;
+  @JsonKey(name: "department_id")
+  final int? departmentId;
   final Map<String, dynamic>? profile;
   @JsonKey(name: "is_active")
   final bool isActive;
@@ -52,6 +54,7 @@ class UserModelLoginDto {
     required this.trackName,
     required this.year,
     required this.currentSemester,
+    required this.departmentId,
     required this.profile,
     required this.isActive,
     required this.createdAt,

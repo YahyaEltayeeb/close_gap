@@ -1,18 +1,18 @@
-class AcademicCourseDto {
+class TeacherAcademicCourseDto {
   final int? id;
   final String? code;
   final String? name;
   final int? semester;
 
-  const AcademicCourseDto({
+  const TeacherAcademicCourseDto({
     required this.id,
     required this.code,
     required this.name,
     required this.semester,
   });
 
-  factory AcademicCourseDto.fromJson(Map<String, dynamic> json) {
-    return AcademicCourseDto(
+  factory TeacherAcademicCourseDto.fromJson(Map<String, dynamic> json) {
+    return TeacherAcademicCourseDto(
       id: json['id'] as int?,
       code: json['code'] as String?,
       name: json['name'] as String?,

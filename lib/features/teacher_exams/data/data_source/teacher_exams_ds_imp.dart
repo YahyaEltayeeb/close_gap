@@ -14,8 +14,8 @@ class TeacherExamsDsImp implements TeacherExamsDs {
   TeacherExamsDsImp(this._apiServices);
 
   @override
-  Future<List<AcademicCourseDto>> getAcademicCourses() {
-    return _apiServices.getAcademicCourses();
+  Future<List<TeacherAcademicCourseDto>> getAcademicCourses() {
+    return _apiServices.getTeacherAcademicCourses();
   }
 
   @override

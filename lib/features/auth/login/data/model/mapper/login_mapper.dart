@@ -37,6 +37,7 @@ extension LoginMapper on UserModelLoginDto {
           _readNestedInt(profileMap, 'faculty', 'id'),
       facultyName: _readDisplayValue(profileMap?['faculty']),
       departmentId:
+          departmentId ??
           _readInt(profileMap?['department_id']) ??
           _readNestedInt(profileMap, 'department', 'id'),
       departmentName: _readDisplayValue(profileMap?['department']),

@@ -10,5 +10,5 @@ abstract class CertificatesDs {
 
   Future<List<SkillDto>> getSkills();
 
-  Future<List<AcademicCourseDto>> getCourses();
+  Future<List<TeacherAcademicCourseDto>> getCourses();
 }

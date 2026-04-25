@@ -9,7 +9,7 @@ import 'package:close_gap/features/teacher_exams/domain/entities/academic_exam_q
 import 'package:close_gap/features/teacher_exams/domain/entities/add_exam_question_request_entity.dart';
 import 'package:close_gap/features/teacher_exams/domain/entities/create_exam_request_entity.dart';
 
-extension AcademicCourseDtoMapper on AcademicCourseDto {
+extension TeacherAcademicCourseDtoMapper on TeacherAcademicCourseDto {
   AcademicCourseEntity toEntity() {
     return AcademicCourseEntity(
       id: id ?? 0,

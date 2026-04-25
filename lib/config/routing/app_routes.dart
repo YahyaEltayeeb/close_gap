@@ -20,4 +20,5 @@ abstract class AppRoutes {
   static const String certificates = '/certificates';
   static const String notifications = '/notifications';
   static const String marketTrends = '/market-trends';
+  static const String academicCourse = '/academic-course';
 }

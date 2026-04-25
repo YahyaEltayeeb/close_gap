@@ -28,7 +28,7 @@ abstract class EndPoints {
   static const String departments = "academic/departments";
   static const String tracks = "academic/jobtrack/list";
   static const String availableSemesters = "academic/available_semesters";
-  static const String academicCourses = "academic/courses/all";
+  static const String academicCoursesY = "academic/courses/all";
   static const String createAcademicExam = "academic-exams/create";
   static const String addAcademicExamQuestion =
       "academic-exams/{examId}/add-question";
@@ -56,4 +56,11 @@ abstract class EndPoints {
   static const String notificationsReadAll = "notifications/read-all";
   static const String notificationById = "notifications/{notifId}";
   static const String notificationsClearAll = "notifications/clear-all";
+  static const String academicCourses = "academic/courses/semester/{semester}";
+  static const String academicExplanation =
+      "academic/courses/{courseId}/resources";
+  static const String academicpublishedexam = "academic-exams/available";
+  static const String academicStartExam = "academic-exams/{exam_id}/start";
+  static const String academicSubmitExam = "/academic-exams/{exam_id}/submit";
+  static const String academicExamResult = "/academic-exams/my-results";
 }

@@ -29,7 +29,7 @@ extension CertificateDtoMapper on CertificateDto {
   }
 }
 
-extension AcademicCourseDtoMapper on AcademicCourseDto {
+extension TeacherAcademicCourseDtoMapper on TeacherAcademicCourseDto {
   CourseOptionEntity toCourseEntity() {
     return CourseOptionEntity(
       id: id ?? 0,

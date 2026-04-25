@@ -44,8 +44,8 @@ class CertificatesDsImp implements CertificatesDs {
   }
 
   @override
-  Future<List<AcademicCourseDto>> getCourses() {
-    return _apiServices.getAcademicCourses();
+  Future<List<TeacherAcademicCourseDto>> getCourses() {
+    return _apiServices.getTeacherAcademicCourses();
   }
 
   @override

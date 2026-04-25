@@ -5,7 +5,7 @@ import 'package:close_gap/features/teacher_exams/data/model/response/add_exam_qu
 import 'package:close_gap/features/teacher_exams/data/model/response/create_exam_response_dto.dart';
 
 abstract class TeacherExamsDs {
-  Future<List<AcademicCourseDto>> getAcademicCourses();
+  Future<List<TeacherAcademicCourseDto>> getAcademicCourses();
 
   Future<CreateExamResponseDto> createExam(CreateExamRequestDto requestDto);
 
