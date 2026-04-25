@@ -7,10 +7,13 @@ import 'package:close_gap/features/assessment/data/model/response/exam_questions
 import 'package:close_gap/features/assessment/data/model/response/start_exam_response.dart';
 
 abstract class AssessmentDs {
-  Future<ExamAnswerResponse> getExamAnswers(ExamAnswerRequest examAnswerRequest);
+  Future<ExamAnswerResponse> getExamAnswers(
+    ExamAnswerRequest examAnswerRequest,
+  );
   Future<ExamFinishResponse> getExamFinish(ExamFinishRequest examFinishRequest);
   Future<StartexamResponse> getStartExam(StartExamRequest startexamRequest);
   Future<ExamquestionsResponse> getExamQuestions({
+    required String track,
     required String level,
     required int page,
     required int perPage,

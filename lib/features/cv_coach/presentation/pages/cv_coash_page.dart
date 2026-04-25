@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:close_gap/features/cv_coach/presentation/manager/cv_coash_event.dart';
 import 'package:close_gap/features/cv_coach/presentation/manager/cv_coash_state.dart';
 import 'package:close_gap/features/cv_coach/presentation/pages/cv_coash_result_screen.dart';
+import 'package:close_gap/features/generate_cv/presentation/pages/cv_coach_screen.dart';
 
 class CvCoachScreen extends StatelessWidget {
   const CvCoachScreen({super.key});
@@ -15,7 +16,7 @@ class CvCoachScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<CvCoashViewModel>(
-      create: (context) =>getIt<CvCoashViewModel>(),
+      create: (context) => getIt<CvCoashViewModel>(),
       child: const _CvCoachView(),
     );
   }
@@ -56,7 +57,9 @@ class _CvCoachViewState extends State<_CvCoachView> {
       );
       return;
     }
-    context.read<CvCoashViewModel>().doIntent(SumbitCvEvent(file: _selectedFile!));
+    context.read<CvCoashViewModel>().doIntent(
+      SumbitCvEvent(file: _selectedFile!),
+    );
   }
 
   Future<void> _watchVideo() async {
@@ -77,17 +80,19 @@ class _CvCoachViewState extends State<_CvCoachView> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Cv Analyze...'),
-                backgroundColor:Colors.green,
+                backgroundColor: Colors.green,
               ),
             );
           }
-         if (state.cvAnalysisEntity != null && !state.isLoaddingCvCoash) {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (_) => CvCoachResultScreen(cvAnalysisEntity: state.cvAnalysisEntity!),
-    ),
-  );
-}
+          if (state.cvAnalysisEntity != null && !state.isLoaddingCvCoash) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => CvCoachResultScreen(
+                  cvAnalysisEntity: state.cvAnalysisEntity!,
+                ),
+              ),
+            );
+          }
         },
         builder: (context, state) {
           return Column(
@@ -234,10 +239,7 @@ class _CvCoachViewState extends State<_CvCoachView> {
             const SizedBox(height: 4),
             const Text(
               'PDF only, max 10MB',
-              style: TextStyle(
-                fontSize: 13,
-                color: Colors.grey,
-              ),
+              style: TextStyle(fontSize: 13, color: Colors.grey),
             ),
             const SizedBox(height: 18),
             // Upload / Submit button
@@ -313,11 +315,7 @@ class _CvCoachViewState extends State<_CvCoachView> {
         const SizedBox(height: 6),
         const Text(
           'If you want AI to help you create a professional\nCV using ATS simply click on Create.',
-          style: TextStyle(
-            fontSize: 13,
-            color: Colors.grey,
-            height: 1.5,
-          ),
+          style: TextStyle(fontSize: 13, color: Colors.grey, height: 1.5),
         ),
         const SizedBox(height: 16),
         Container(
@@ -350,7 +348,11 @@ class _CvCoachViewState extends State<_CvCoachView> {
                 height: 40,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Navigate to AI CV creation screen
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const GenerateCvScreen(),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF2196F3),
@@ -363,10 +365,7 @@ class _CvCoachViewState extends State<_CvCoachView> {
                   ),
                   child: const Text(
                     'Create',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -391,8 +390,7 @@ class _CvCoachViewState extends State<_CvCoachView> {
         ),
         const SizedBox(height: 12),
         GestureDetector(
-          onTap:
-           _watchVideo,
+          onTap: _watchVideo,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
@@ -423,10 +421,7 @@ class _CvCoachViewState extends State<_CvCoachView> {
                       SizedBox(height: 2),
                       Text(
                         'YouTube',
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: Colors.grey,
-                        ),
+                        style: TextStyle(fontSize: 13, color: Colors.grey),
                       ),
                     ],
                   ),
@@ -434,8 +429,7 @@ class _CvCoachViewState extends State<_CvCoachView> {
                 SizedBox(
                   height: 40,
                   child: ElevatedButton.icon(
-                    onPressed:
-                     _watchVideo,
+                    onPressed: _watchVideo,
                     icon: const Icon(Icons.chevron_right, size: 18),
                     label: const Text(
                       'Watch Video',

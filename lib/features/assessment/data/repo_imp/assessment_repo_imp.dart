@@ -47,6 +47,7 @@ class AssessmentRepoImp implements AssessmentRepo {
   }) async {
     return await safeApiCall(() async {
       final result = await _assessmentDs.getExamQuestions(
+        track: track,
         level: level,
         page: page,
         perPage: perPage,

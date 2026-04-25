@@ -4,6 +4,20 @@ abstract class AppConstants {
   static const String token = 'token';
   static const String isTokenSaved = 'isTokenSaved';
   static const String isRemember = 'isRemember';
+  static const String userRole = 'userRole';
+  static const String userName = 'userName';
+  static const String userEmail = 'userEmail';
+  static const String userTrackId = 'userTrackId';
+  static const String userTrackName = 'userTrackName';
+  static const String userYear = 'userYear';
+  static const String userCurrentSemester = 'userCurrentSemester';
+  static const String userPathType = 'userPathType';
+  static const String userUniversityId = 'userUniversityId';
+  static const String userUniversityName = 'userUniversityName';
+  static const String userFacultyId = 'userFacultyId';
+  static const String userFacultyName = 'userFacultyName';
+  static const String userDepartmentId = 'userDepartmentId';
+  static const String userDepartmentName = 'userDepartmentName';
 
   // 🔹 Localization Keys
   static const String languageCode = 'languageCode';
@@ -11,12 +25,9 @@ abstract class AppConstants {
   static const String enKey = 'en';
 
   // 🔹 darkAndLight Keys
-   
-   static const String isDark='false';
 
+  static const String isDark = 'false';
 
-
-  
   // 🔹 General Constants
   static const String noInternet = 'No Internet Connection';
   static const int animateSeconds = 300;
@@ -24,11 +35,6 @@ abstract class AppConstants {
   static const String helpContentKey = "help_screen_content";
   static const String privacyPolicyContentKey = "privacy_policy";
   static const String securityRolesContentKey = "security_roles_config";
-
-
-
-
- 
-
-
+  static const String jobsAgentId = "2075279981825898";
+  static const String linkedinPostsAgentId = "5505082972463922";
 }

@@ -11,9 +11,15 @@ class LinkedinPostsRepoImp implements LinkedinPostsRepo {
   LinkedinPostsRepoImp(this._linkedinPostsDataSource);
 
   @override
-  Future<ApiResult<List<LinkedinPostEntity>>> getLinkedinPosts() async {
+  Future<ApiResult<List<LinkedinPostEntity>>> getLinkedinPosts({
+    required String agentId,
+    String? track,
+  }) async {
     return await safeApiCall(() async {
-      var result = await _linkedinPostsDataSource.getLinkedinPostsDataSource();
+      var result = await _linkedinPostsDataSource.getLinkedinPostsDataSource(
+        agentId: agentId,
+        track: track,
+      );
       return result.posts.map((e) => e.toEntity()).toList();
     });
   }

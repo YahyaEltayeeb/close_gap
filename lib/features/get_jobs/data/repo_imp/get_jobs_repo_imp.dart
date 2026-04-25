@@ -10,9 +10,15 @@ class GetJobsRepoImp implements GetJobsRepo {
   final GetJobsDataSource _getJobsDataSource;
   GetJobsRepoImp(this._getJobsDataSource);
   @override
-  Future<ApiResult<List<GetJobEntity>>> getJobs() async {
+  Future<ApiResult<List<GetJobEntity>>> getJobs({
+    required String agentId,
+    String? track,
+  }) async {
     return await safeApiCall(() async {
-      var result = await _getJobsDataSource.getJobsDataSource();
+      var result = await _getJobsDataSource.getJobsDataSource(
+        agentId: agentId,
+        track: track,
+      );
       return result.map((e) => e.toEntity()).toList();
     });
   }

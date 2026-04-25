@@ -2,12 +2,11 @@ import 'package:close_gap/core/l10n/translations/app_localizations.dart';
 import 'package:close_gap/features/get_jobs/presentation/manager/get_jobs_event.dart';
 import 'package:close_gap/features/get_jobs/presentation/manager/get_jobs_state.dart';
 import 'package:close_gap/features/get_jobs/presentation/manager/get_jobs_view_model.dart';
-import 'package:close_gap/features/get_jobs/presentation/widget/connect_linkedin_card.dart';
 import 'package:close_gap/features/get_jobs/presentation/widget/error_state_widget.dart';
-import 'package:close_gap/features/get_jobs/presentation/widget/job_alert_card.dart';
 import 'package:close_gap/features/get_jobs/presentation/widget/job_item_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class JobsTabContent extends StatefulWidget {
   const JobsTabContent({super.key});
@@ -17,7 +16,6 @@ class JobsTabContent extends StatefulWidget {
 }
 
 class _JobsTabContentState extends State<JobsTabContent> {
-  bool _alertEnabled = true;
   final Set<int> _savedJobs = {};
 
   @override
@@ -53,13 +51,6 @@ class _JobsTabContentState extends State<JobsTabContent> {
                   ),
                 ),
               ),
-            ConnectLinkedInCard(onConnect: () {}),
-            const SizedBox(height: 8),
-            JobAlertsCard(
-              isEnabled: _alertEnabled,
-              onToggle: (val) => setState(() => _alertEnabled = val),
-            ),
-            const SizedBox(height: 8),
             if (jobs.isEmpty)
               Center(
                 child: Padding(
@@ -75,15 +66,23 @@ class _JobsTabContentState extends State<JobsTabContent> {
                 (e) => JobItemCard(
                   job: e.value,
                   isSaved: _savedJobs.contains(e.key),
-                  onToggleSave: () => setState(() => _savedJobs.contains(e.key)
-                      ? _savedJobs.remove(e.key)
-                      : _savedJobs.add(e.key)),
-                  onApply: () {},
+                  onToggleSave: () => setState(
+                    () => _savedJobs.contains(e.key)
+                        ? _savedJobs.remove(e.key)
+                        : _savedJobs.add(e.key),
+                  ),
+                  onApply: () => _openUrl(e.value.jobUrl),
                 ),
               ),
           ],
         );
       },
     );
+  }
+
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.tryParse(url);
+    if (uri == null || !uri.hasScheme) return;
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 }

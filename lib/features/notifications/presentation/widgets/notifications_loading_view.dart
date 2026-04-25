@@ -1,0 +1,99 @@
+import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
+
+class NotificationsLoadingView extends StatelessWidget {
+  const NotificationsLoadingView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
+      children: const [
+        _ShimmerLine(widthFactor: 0.38, height: 20),
+        SizedBox(height: 10),
+        _ShimmerLine(widthFactor: 0.7, height: 14),
+        SizedBox(height: 22),
+        _NotificationSkeleton(),
+        SizedBox(height: 12),
+        _NotificationSkeleton(),
+        SizedBox(height: 12),
+        _NotificationSkeleton(),
+      ],
+    );
+  }
+}
+
+class _NotificationSkeleton extends StatelessWidget {
+  const _NotificationSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: const Color(0xFFE8EDF3),
+      highlightColor: Colors.white,
+      child: Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(22),
+        ),
+        child: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                _ShimmerBox(width: 10, height: 10),
+                SizedBox(width: 10),
+                Expanded(
+                  child: _ShimmerBox(width: double.infinity, height: 16),
+                ),
+              ],
+            ),
+            SizedBox(height: 12),
+            _ShimmerLine(widthFactor: 0.92, height: 14),
+            SizedBox(height: 8),
+            _ShimmerLine(widthFactor: 0.54, height: 14),
+            SizedBox(height: 16),
+            _ShimmerLine(widthFactor: 0.3, height: 12),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ShimmerLine extends StatelessWidget {
+  const _ShimmerLine({required this.widthFactor, required this.height});
+
+  final double widthFactor;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return FractionallySizedBox(
+      widthFactor: widthFactor,
+      alignment: Alignment.centerLeft,
+      child: _ShimmerBox(width: double.infinity, height: height),
+    );
+  }
+}
+
+class _ShimmerBox extends StatelessWidget {
+  const _ShimmerBox({required this.width, required this.height});
+
+  final double width;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+    );
+  }
+}

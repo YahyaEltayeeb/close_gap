@@ -34,12 +34,7 @@ class RegisterViewModel extends Cubit<RegisterState> {
           ),
         );
       case ApiErrorResult():
-        emit(
-          state.copyWith(
-            isLoading: false,
-            errorMessage: result.failure,
-          ),
-        );
+        emit(state.copyWith(isLoading: false, errorMessage: result.failure));
     }
   }
 
@@ -70,9 +65,13 @@ class RegisterViewModel extends Cubit<RegisterState> {
           ),
         );
       case (ApiErrorResult(failure: final failure), _):
-        emit(state.copyWith(isLookupLoading: false, lookupErrorMessage: failure));
+        emit(
+          state.copyWith(isLookupLoading: false, lookupErrorMessage: failure),
+        );
       case (_, ApiErrorResult(failure: final failure)):
-        emit(state.copyWith(isLookupLoading: false, lookupErrorMessage: failure));
+        emit(
+          state.copyWith(isLookupLoading: false, lookupErrorMessage: failure),
+        );
     }
   }
 
@@ -99,7 +98,9 @@ class RegisterViewModel extends Cubit<RegisterState> {
           ),
         );
       case ApiErrorResult(failure: final failure):
-        emit(state.copyWith(isLookupLoading: false, lookupErrorMessage: failure));
+        emit(
+          state.copyWith(isLookupLoading: false, lookupErrorMessage: failure),
+        );
     }
   }
 
@@ -124,7 +125,9 @@ class RegisterViewModel extends Cubit<RegisterState> {
           ),
         );
       case ApiErrorResult(failure: final failure):
-        emit(state.copyWith(isLookupLoading: false, lookupErrorMessage: failure));
+        emit(
+          state.copyWith(isLookupLoading: false, lookupErrorMessage: failure),
+        );
     }
   }
 
@@ -137,12 +140,16 @@ class RegisterViewModel extends Cubit<RegisterState> {
       ),
     );
 
-    final result = await _registerLookupUseCase.getAvailableSemesters(1);
+    final result = await _registerLookupUseCase.getAvailableSemesters(
+      departmentId,
+    );
     switch (result) {
       case ApiSuccessResult(data: final data):
         emit(state.copyWith(isLookupLoading: false, semesters: data));
       case ApiErrorResult(failure: final failure):
-        emit(state.copyWith(isLookupLoading: false, lookupErrorMessage: failure));
+        emit(
+          state.copyWith(isLookupLoading: false, lookupErrorMessage: failure),
+        );
     }
   }
 }

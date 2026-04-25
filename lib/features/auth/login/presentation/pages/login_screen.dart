@@ -39,12 +39,34 @@ class _LoginScreenState extends State<LoginScreen> {
                 backgroundColor: AppColors.red,
               );
             } else if (state.isSuccess) {
+              final user = state.userModelLoginEntity;
+              final normalizedRole = user?.role.trim().toLowerCase();
+              final isTeacher =
+                  normalizedRole == 'teacher' || normalizedRole == 'doctor';
+              final hasExams = user?.exams.isNotEmpty ?? false;
+
               ToastMessage.toastMsg(locale.login_success);
-              context.pushNamedAndRemoveUntil(
-                AppRoutes.instructionspage,
-                arguments: 1,
-                predicate: (route) => false,
-              );
+              if (isTeacher) {
+                context.pushNamedAndRemoveUntil(
+                  AppRoutes.teacherHome,
+                  arguments: user,
+                  predicate: (route) => false,
+                );
+              } else if (hasExams) {
+                context.pushNamedAndRemoveUntil(
+                  AppRoutes.appSections,
+                  predicate: (route) => false,
+                );
+              } else {
+                context.pushNamedAndRemoveUntil(
+                  AppRoutes.instructionspage,
+                  arguments: {
+                    'trackId': user?.trackId,
+                    'trackName': user?.trackName,
+                  },
+                  predicate: (route) => false,
+                );
+              }
             }
           },
           child: LayoutBuilder(
@@ -58,7 +80,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         AuthLogo(
-                          desc: locale.enter_your_username_and_password_to_login,
+                          desc:
+                              locale.enter_your_username_and_password_to_login,
                           pross: locale.login,
                         ),
                         SizedBox(height: context.height * 0.05),
@@ -99,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                         SizedBox(height: 10),
-                    //    
+                        //
                         SizedBox(height: context.height * 0.025),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,

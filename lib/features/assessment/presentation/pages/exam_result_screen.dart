@@ -1,20 +1,23 @@
+import 'dart:math' as math;
+
 import 'package:close_gap/config/routing/app_routes.dart';
 import 'package:close_gap/config/routing/routing_extensions.dart';
 import 'package:close_gap/features/assessment/domain/entities/exam_finish_entity.dart';
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 class ExamResultScreen extends StatefulWidget {
-  final bool invalidated;
-  final ExamFinishEntity? result;
-  final int trackId;
-
   const ExamResultScreen({
     super.key,
     required this.invalidated,
     this.result,
-    required this.trackId,
+    this.trackId,
+    this.trackName,
   });
+
+  final bool invalidated;
+  final ExamFinishEntity? result;
+  final int? trackId;
+  final String? trackName;
 
   @override
   State<ExamResultScreen> createState() => _ExamResultScreenState();
@@ -46,9 +49,10 @@ class _ExamResultScreenState extends State<ExamResultScreen>
   }
 
   int get score => widget.invalidated ? 0 : (widget.result?.score ?? 0);
-  int get correct => widget.invalidated ? 0 : (widget.result?.correctAnswers ?? 0);
+  int get correct =>
+      widget.invalidated ? 0 : (widget.result?.correctAnswers ?? 0);
   int get wrong => widget.invalidated ? 0 : (widget.result?.wrongAnswers ?? 0);
-  int get total => widget.result?.totalQuestions ?? 0;
+  int get totalQuestions => widget.result?.totalQuestions ?? 0;
 
   String get scoreLabel {
     if (widget.invalidated) return 'Assessment Rejected';
@@ -65,7 +69,6 @@ class _ExamResultScreenState extends State<ExamResultScreen>
       body: SafeArea(
         child: Column(
           children: [
-            // Close button
             Align(
               alignment: Alignment.topRight,
               child: Padding(
@@ -79,28 +82,29 @@ class _ExamResultScreenState extends State<ExamResultScreen>
                       color: const Color(0xFFF3F4F6),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Icon(Icons.close, size: 18, color: Color(0xFF374151)),
+                    child: const Icon(
+                      Icons.close,
+                      size: 18,
+                      color: Color(0xFF374151),
+                    ),
                   ),
                 ),
               ),
             ),
-
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   children: [
-                    const Text(
-                      'Assessment Result',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF111827)),
+                    Text(
+                      _resolvedTitle(),
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF111827),
+                      ),
                     ),
-
                     const SizedBox(height: 20),
-
-                    // Score card
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 28),
@@ -109,18 +113,19 @@ class _ExamResultScreenState extends State<ExamResultScreen>
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                              color: Colors.black.withOpacity(0.06),
-                              blurRadius: 16,
-                              offset: const Offset(0, 4))
+                            color: Colors.black.withValues(alpha: 0.06),
+                            blurRadius: 16,
+                            offset: const Offset(0, 4),
+                          ),
                         ],
                       ),
                       child: Column(
                         children: [
-                          // Circular progress
                           AnimatedBuilder(
                             animation: _scoreAnim,
                             builder: (context, _) {
-                              final animScore = (score * _scoreAnim.value).round();
+                              final animScore = (score * _scoreAnim.value)
+                                  .round();
                               return SizedBox(
                                 width: 140,
                                 height: 140,
@@ -130,7 +135,8 @@ class _ExamResultScreenState extends State<ExamResultScreen>
                                     CustomPaint(
                                       size: const Size(140, 140),
                                       painter: _ScoreCirclePainter(
-                                        progress: score / 100 * _scoreAnim.value,
+                                        progress:
+                                            score / 100 * _scoreAnim.value,
                                         invalidated: widget.invalidated,
                                       ),
                                     ),
@@ -150,8 +156,9 @@ class _ExamResultScreenState extends State<ExamResultScreen>
                                         const Text(
                                           'your score',
                                           style: TextStyle(
-                                              fontSize: 11,
-                                              color: Color(0xFF9CA3AF)),
+                                            fontSize: 11,
+                                            color: Color(0xFF9CA3AF),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -160,23 +167,24 @@ class _ExamResultScreenState extends State<ExamResultScreen>
                               );
                             },
                           ),
-
                           const SizedBox(height: 16),
-
-                          // Label
                           if (widget.invalidated)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
-                                Icon(Icons.warning_rounded,
-                                    color: Color(0xFFEF4444), size: 20),
+                                Icon(
+                                  Icons.warning_rounded,
+                                  color: Color(0xFFEF4444),
+                                  size: 20,
+                                ),
                                 SizedBox(width: 6),
                                 Text(
                                   'Assessment Rejected',
                                   style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      color: Color(0xFFEF4444)),
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700,
+                                    color: Color(0xFFEF4444),
+                                  ),
                                 ),
                               ],
                             )
@@ -184,22 +192,20 @@ class _ExamResultScreenState extends State<ExamResultScreen>
                             Text(
                               scoreLabel,
                               style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
-                                  color: Color(0xFF111827)),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Color(0xFF111827),
+                              ),
                             ),
                         ],
                       ),
                     ),
-
                     const SizedBox(height: 16),
-
-                    // Stats row
                     Row(
                       children: [
                         _StatBox(
-                          value: '${_formatTime(widget.result)}',
-                          label: 'Time taken',
+                          value: '$totalQuestions',
+                          label: 'Questions',
                           color: const Color(0xFF2563EB),
                         ),
                         const SizedBox(width: 10),
@@ -216,23 +222,23 @@ class _ExamResultScreenState extends State<ExamResultScreen>
                         ),
                       ],
                     ),
-
                     const SizedBox(height: 16),
-
-                    // Reason for rejection (invalidated only)
                     if (widget.invalidated) ...[
                       GestureDetector(
                         onTap: () => setState(() => _showReason = !_showReason),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 14),
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                             boxShadow: [
                               BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
-                                  blurRadius: 8)
+                                color: Colors.black.withValues(alpha: 0.05),
+                                blurRadius: 8,
+                              ),
                             ],
                           ),
                           child: Row(
@@ -241,9 +247,10 @@ class _ExamResultScreenState extends State<ExamResultScreen>
                                 child: Text(
                                   'Reason for rejection',
                                   style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 14,
-                                      color: Color(0xFF2563EB)),
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14,
+                                    color: Color(0xFF2563EB),
+                                  ),
                                 ),
                               ),
                               Icon(
@@ -269,51 +276,58 @@ class _ExamResultScreenState extends State<ExamResultScreen>
                             ),
                             boxShadow: [
                               BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
-                                  blurRadius: 8)
+                                color: Colors.black.withValues(alpha: 0.05),
+                                blurRadius: 8,
+                              ),
                             ],
                           ),
                           child: Column(
-                            children: [
-                              'Detected holding a mobile phone during the assessment.',
-                              'Your Assessment submission has been rejected due to violations of assessment rule.',
-                              'You have 3 more attempts to retake this assessment.',
-                            ]
-                                .map((t) => Padding(
-                                      padding: const EdgeInsets.only(bottom: 8),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          const Text('• ',
+                            children:
+                                [
+                                      'Detected holding a mobile phone during the assessment.',
+                                      'Your Assessment submission has been rejected due to violations of assessment rule.',
+                                      'You have 3 more attempts to retake this assessment.',
+                                    ]
+                                    .map(
+                                      (text) => Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 8,
+                                        ),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            const Text(
+                                              '• ',
                                               style: TextStyle(
-                                                  color: Color(0xFF6B7280),
-                                                  fontSize: 13)),
-                                          Expanded(
-                                            child: Text(
-                                              t,
-                                              style: const TextStyle(
+                                                color: Color(0xFF6B7280),
+                                                fontSize: 13,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                text,
+                                                style: const TextStyle(
                                                   fontSize: 13,
                                                   color: Color(0xFF6B7280),
-                                                  height: 1.4),
+                                                  height: 1.4,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ))
-                                .toList(),
+                                    )
+                                    .toList(),
                           ),
                         ),
                       const SizedBox(height: 16),
                     ],
-
                     const SizedBox(height: 40),
                   ],
                 ),
               ),
             ),
-
-            // Bottom buttons
             Container(
               padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
               decoration: const BoxDecoration(
@@ -330,7 +344,10 @@ class _ExamResultScreenState extends State<ExamResultScreen>
                         if (widget.invalidated) {
                           context.pushNamedAndRemoveUntil(
                             AppRoutes.instructionspage,
-                            arguments: widget.trackId,
+                            arguments: {
+                              'trackId': widget.trackId,
+                              'trackName': widget.trackName,
+                            },
                             predicate: (route) => false,
                           );
                           return;
@@ -346,14 +363,17 @@ class _ExamResultScreenState extends State<ExamResultScreen>
                         foregroundColor: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       child: Text(
                         widget.invalidated
                             ? 'Retake Assessment (3 attempts left)'
                             : 'Create learning plan',
                         style: const TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15),
+                          fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
                   ),
@@ -367,11 +387,16 @@ class _ExamResultScreenState extends State<ExamResultScreen>
                         foregroundColor: const Color(0xFF374151),
                         side: const BorderSide(color: Color(0xFFE5E7EB)),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                      child: const Text('View details',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500, fontSize: 15)),
+                      child: const Text(
+                        'View details',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -383,23 +408,25 @@ class _ExamResultScreenState extends State<ExamResultScreen>
     );
   }
 
-  String _formatTime(ExamFinishEntity? result) {
-    // placeholder — لو عندك elapsed time من الـ cubit ممكن تبعتها
-    return '12:30';
+  String _resolvedTitle() {
+    final normalizedTrackName = widget.trackName?.trim() ?? '';
+    if (normalizedTrackName.isNotEmpty) {
+      return '$normalizedTrackName Result';
+    }
+    return 'Assessment Result';
   }
 }
 
-// ── STAT BOX ─────────────────────────────────────────────
 class _StatBox extends StatelessWidget {
-  final String value;
-  final String label;
-  final Color color;
-
   const _StatBox({
     required this.value,
     required this.label,
     required this.color,
   });
+
+  final String value;
+  final String label;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -411,22 +438,27 @@ class _StatBox extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 8,
-                offset: const Offset(0, 2))
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
           ],
         ),
         child: Column(
           children: [
-            Text(value,
-                style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                    color: color)),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                color: color,
+              ),
+            ),
             const SizedBox(height: 4),
-            Text(label,
-                style: const TextStyle(
-                    fontSize: 12, color: Color(0xFF9CA3AF))),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 12, color: Color(0xFF9CA3AF)),
+            ),
           ],
         ),
       ),
@@ -434,12 +466,11 @@ class _StatBox extends StatelessWidget {
   }
 }
 
-// ── SCORE CIRCLE PAINTER ──────────────────────────────────
 class _ScoreCirclePainter extends CustomPainter {
+  _ScoreCirclePainter({required this.progress, required this.invalidated});
+
   final double progress;
   final bool invalidated;
-
-  _ScoreCirclePainter({required this.progress, required this.invalidated});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -447,14 +478,12 @@ class _ScoreCirclePainter extends CustomPainter {
     final radius = size.width / 2 - 10;
     const strokeWidth = 10.0;
 
-    // Background circle
     final bgPaint = Paint()
       ..color = const Color(0xFFF3F4F6)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth;
     canvas.drawCircle(center, radius, bgPaint);
 
-    // Progress arc
     final progressPaint = Paint()
       ..color = invalidated ? const Color(0xFFD1D5DB) : const Color(0xFF2563EB)
       ..style = PaintingStyle.stroke

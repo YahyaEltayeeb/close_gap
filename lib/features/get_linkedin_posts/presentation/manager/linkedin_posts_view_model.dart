@@ -9,7 +9,7 @@ import 'package:injectable/injectable.dart';
 class LinkedinPostsViewModel extends Cubit<LinkedinPostsState> {
   final LinkedinPostsUseCase _linkedinPostsUseCase;
   LinkedinPostsViewModel(this._linkedinPostsUseCase)
-      : super(LinkedinPostsState());
+    : super(LinkedinPostsState());
 
   void doIntent(LinkedinPostsEvent event) {
     switch (event) {
@@ -19,14 +19,18 @@ class LinkedinPostsViewModel extends Cubit<LinkedinPostsState> {
   }
 
   void _getLinkedinPosts() async {
-    emit(state.copyWith(isLoadingLinkedinPosts: true));
+    emit(
+      state.copyWith(isLoadingLinkedinPosts: true, errorMesLinkedinPosts: ''),
+    );
     var result = await _linkedinPostsUseCase.call();
     switch (result) {
       case ApiSuccessResult():
         emit(
           state.copyWith(
             isLoadingLinkedinPosts: false,
+            errorMesLinkedinPosts: '',
             linkedinPostsList: result.data,
+            resetLinkedinPostsList: true,
           ),
         );
       case ApiErrorResult():
@@ -34,6 +38,8 @@ class LinkedinPostsViewModel extends Cubit<LinkedinPostsState> {
           state.copyWith(
             isLoadingLinkedinPosts: false,
             errorMesLinkedinPosts: result.failure.toString(),
+            linkedinPostsList: const [],
+            resetLinkedinPostsList: true,
           ),
         );
     }

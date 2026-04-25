@@ -16,15 +16,14 @@ class LoginViewModel extends Cubit<LoginState> {
     switch (result) {
       case ApiSuccessResult():
         emit(
-          state.copyWith(isLoading: false, userModelLoginEntity: result.data, isSuccess: true),
-        );
-      case ApiErrorResult():
-        emit(
           state.copyWith(
             isLoading: false,
-            errorMessage: result.failure,
+            userModelLoginEntity: result.data,
+            isSuccess: true,
           ),
         );
+      case ApiErrorResult():
+        emit(state.copyWith(isLoading: false, errorMessage: result.failure));
     }
   }
 }

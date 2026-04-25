@@ -9,20 +9,24 @@ class CustomModeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = context.colorScheme;
     final theme = context.textTheme;
     final locale = context.localization;
 
     return BlocBuilder<LocaleThemeCubit, LocaleThemeState>(
       builder: (context, state) {
         return ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 18),
           leading: Icon(
             state.isDark ? Icons.light_mode_outlined : Icons.dark_mode_outlined,
-            color: color.onSecondary,
+            color: const Color(0xFF5E6B7A),
           ),
           title: Text(
             state.isDark ? locale.light_mode : locale.dark_mode,
-            style: theme.displaySmall!.copyWith(fontSize: 14),
+            style: theme.displaySmall!.copyWith(
+              fontSize: 15,
+              color: const Color(0xFF162033),
+              fontWeight: FontWeight.w600,
+            ),
           ),
           trailing: Switch(
             value: state.isDark,

@@ -1,16 +1,17 @@
 import 'package:close_gap/features/generate_cv/common/generate_cv_dimensions.dart';
 import 'package:close_gap/features/generate_cv/common/generate_cv_text_style.dart';
 import 'package:flutter/material.dart';
+
 class CvStatusHeader extends StatelessWidget {
   final String title;
   final String subtitle;
- 
+
   const CvStatusHeader({
     super.key,
     required this.title,
     required this.subtitle,
   });
- 
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -36,4 +37,3 @@ class CvStatusHeader extends StatelessWidget {
     );
   }
 }
- 

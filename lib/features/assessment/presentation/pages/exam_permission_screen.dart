@@ -5,13 +5,16 @@ import 'package:close_gap/features/assessment/presentation/manager/permission/ex
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
+
 import '../widgets/camera_box.dart';
 import '../widgets/permission_button.dart';
 import '../widgets/warning_widget.dart';
 
 class ExamPermissionScreen extends StatelessWidget {
-  final int trackId;
-  const ExamPermissionScreen({super.key, required this.trackId});
+  const ExamPermissionScreen({super.key, this.trackId, this.trackName});
+
+  final int? trackId;
+  final String? trackName;
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +24,12 @@ class ExamPermissionScreen extends StatelessWidget {
         body: SafeArea(
           child: BlocListener<ExamPermissionCubit, ExamPermissionState>(
             listener: (context, state) {
-              /// ❌ لو المستخدم رفض الإذن
               if (state is ExamPermissionDenied) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Camera permission denied")),
                 );
               }
 
-              /// ❌ لو رفض نهائي
               if (state is ExamPermissionPermanentlyDenied) {
                 showDialog(
                   context: context,
@@ -49,15 +50,12 @@ class ExamPermissionScreen extends StatelessWidget {
                 );
               }
 
-              /// ⚠️ Error
               if (state is ExamPermissionError) {
                 ScaffoldMessenger.of(
                   context,
                 ).showSnackBar(SnackBar(content: Text(state.message)));
               }
             },
-
-            /// 👇 ده الـ UI كله
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -73,28 +71,26 @@ class ExamPermissionScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 10),
-
-                  const Text(
-                    "Allow Camera, Mic, Screen Access",
+                  Text(
+                    trackName?.trim().isNotEmpty == true
+                        ? "Allow Camera, Mic, Screen Access for $trackName"
+                        : "Allow Camera, Mic, Screen Access",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-
                   const SizedBox(height: 10),
-
                   const Text(
                     "To ensure exam security, we need access...",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.grey),
                   ),
-
                   const SizedBox(height: 20),
                   const Divider(),
                   const SizedBox(height: 20),
-
-                  /// UI reactive
                   BlocBuilder<ExamPermissionCubit, ExamPermissionState>(
                     builder: (context, state) {
                       final cubit = context.read<ExamPermissionCubit>();
@@ -111,35 +107,28 @@ class ExamPermissionScreen extends StatelessWidget {
                               isCameraOn: cubit.isCameraOn,
                               controller: cubit.controller,
                               onCameraTap: () => cubit.handleCamera(),
-
-                              /// 👈 هنا التعديل
                             ),
-
                             const SizedBox(height: 20),
-
                             PermissionButton(
-                              enabled: cubit.isCameraOn,
+                              enabled: cubit.isCameraOn && trackId != null,
                               onPressed: () {
-                                if (cubit.isCameraOn) {
+                                if (cubit.isCameraOn && trackId != null) {
                                   final controller = cubit.controller!;
-
-                                  // ✅ امنع الـ cubit من يعمل dispose للكاميرا
                                   cubit.controller = null;
                                   context.pushNamed(
                                     AppRoutes.examScreen,
                                     arguments: {
                                       'controller': controller,
                                       'trackId': trackId,
+                                      'trackName': trackName,
                                     },
                                   );
                                 }
                               },
                             ),
-
                             const SizedBox(height: 20),
                             const Divider(),
                             const SizedBox(height: 10),
-
                             const WarningWidget(),
                           ],
                         ),

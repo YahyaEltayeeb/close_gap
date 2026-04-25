@@ -18,13 +18,11 @@ class CvReadyCard extends StatelessWidget {
     this.onShare,
   });
 
-  
   static const double _cardWidth = 350;
   static const double _cardHeight = 180;
 
-
-  static const double _downloadW = 150;  
-  static const double _downloadH = 36;   
+  static const double _downloadW = 150;
+  static const double _downloadH = 36;
 
   @override
   Widget build(BuildContext context) {
@@ -81,12 +79,9 @@ class CvReadyCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(
           GenerateCvDimensions.borderRadiusLarge,
         ),
-       
-       
       ),
       child: Row(
         children: [
-         
           CvActionButton(
             label: 'Download PDF',
             variant: CvButtonVariant.filled,
@@ -95,7 +90,7 @@ class CvReadyCard extends StatelessWidget {
             fixedHeight: _downloadH,
           ),
           const SizedBox(width: GenerateCvDimensions.spacingSmall),
-          
+
           Expanded(
             child: CvActionButton(
               label: 'View',
@@ -105,7 +100,7 @@ class CvReadyCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: GenerateCvDimensions.spacingSmall),
-        
+
           Expanded(
             child: CvActionButton(
               label: 'Share',

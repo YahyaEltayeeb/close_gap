@@ -7,7 +7,6 @@ import 'package:injectable/injectable.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../di/di.dart';
 import '../services/token_interceptor.dart';
 import 'network_constants.dart';
 

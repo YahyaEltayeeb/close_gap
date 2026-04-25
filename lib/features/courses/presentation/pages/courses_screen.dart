@@ -6,6 +6,6 @@ class CoursesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AdvancedLearningPlanScreen(trackId: 1);
+    return const AdvancedLearningPlanScreen();
   }
 }

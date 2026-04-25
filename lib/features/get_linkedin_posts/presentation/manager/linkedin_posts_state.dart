@@ -15,13 +15,16 @@ class LinkedinPostsState {
     List<LinkedinPostEntity>? linkedinPostsList,
     bool? isLoadingLinkedinPosts,
     String? errorMesLinkedinPosts,
+    bool resetLinkedinPostsList = false,
   }) {
     return LinkedinPostsState(
       isLoadingLinkedinPosts:
           isLoadingLinkedinPosts ?? this.isLoadingLinkedinPosts,
       errorMesLinkedinPosts:
           errorMesLinkedinPosts ?? this.errorMesLinkedinPosts,
-      linkedinPostsList: linkedinPostsList ?? this.linkedinPostsList,
+      linkedinPostsList: resetLinkedinPostsList
+          ? linkedinPostsList
+          : linkedinPostsList ?? this.linkedinPostsList,
     );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:close_gap/core/extensions/extensions.dart';
 import 'package:close_gap/features/app_section/widget/custom_card_info.dart';
 
 class CustomInfoWidget extends StatelessWidget {
@@ -7,13 +6,13 @@ class CustomInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var color = context.colorScheme;
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: color.onSurface,
+        borderRadius: BorderRadius.circular(24),
+        color: Colors.white,
+        border: Border.all(color: const Color(0xFFDCE9F8)),
       ),
-      child: CustomCardInfo(),
+      child: const CustomCardInfo(),
     );
   }
 }

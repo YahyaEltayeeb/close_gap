@@ -1,28 +1,31 @@
 import 'dart:async';
-import 'package:close_gap/features/assessment/domain/entities/exam_answer_entity%20.dart';
-import 'package:close_gap/features/assessment/data/model/request/start_exam_request.dart';
-import 'package:close_gap/features/assessment/domain/entities/start_exam_entity.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:close_gap/core/network/api_results.dart';
-import 'package:close_gap/features/assessment/domain/use_case/assessment_use_case.dart';
-import 'package:close_gap/features/assessment/domain/entities/exam_question_entity.dart';
-import 'package:close_gap/features/assessment/domain/entities/exam_finish_entity.dart';
+import 'package:close_gap/core/services/token_service.dart';
 import 'package:close_gap/features/assessment/data/model/request/exam_answer_request.dart';
 import 'package:close_gap/features/assessment/data/model/request/exam_finish_request.dart';
+import 'package:close_gap/features/assessment/data/model/request/start_exam_request.dart';
+import 'package:close_gap/features/assessment/domain/entities/exam_answer_entity%20.dart';
+import 'package:close_gap/features/assessment/domain/entities/exam_finish_entity.dart';
+import 'package:close_gap/features/assessment/domain/entities/exam_question_entity.dart';
+import 'package:close_gap/features/assessment/domain/entities/start_exam_entity.dart';
+import 'package:close_gap/features/assessment/domain/use_case/assessment_use_case.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 part 'exam_state.dart';
 
 @Injectable()
 class ExamCubit extends Cubit<ExamState> {
-  final AssessmentUseCase _useCase;
+  ExamCubit(this._useCase, this._tokenService) : super(ExamInitial());
 
-  ExamCubit(this._useCase) : super(ExamInitial());
+  final AssessmentUseCase _useCase;
+  final TokenService _tokenService;
 
   Timer? _timer;
 
   List<QuestionEntity> _questions = [];
-  Map<int, int> _answers = {};
+  final Map<int, int> _answers = {};
 
   int _currentIndex = 0;
   int _remainingSeconds = 0;
@@ -36,7 +39,6 @@ class ExamCubit extends Cubit<ExamState> {
     _currentIndex = 0;
     _answers.clear();
 
-    // ✅ Step 1: getStartExam عشان نجيب examId و remainingSeconds
     final startResult = await _useCase.getStartExam(
       StartExamRequest(trackId: trackId),
     );
@@ -51,9 +53,18 @@ class ExamCubit extends Cubit<ExamState> {
     final remaining = startData.remainingSeconds ?? 0;
     _remainingSeconds = remaining <= 0 ? 1800 : remaining;
 
-    // ✅ Step 2: getExamQuestions
+    final savedTrackName = _tokenService.getSavedTrackName();
+    if (savedTrackName == null || savedTrackName.trim().isEmpty) {
+      emit(
+        const ExamError(
+          'Track information is missing. Please log in again and retry.',
+        ),
+      );
+      return;
+    }
+
     final questionsResult = await _useCase.getExamQuestions(
-      track: 'Ai', // مؤقت
+      track: savedTrackName.trim(),
       level: 'basic',
       page: 1,
       perPage: 100,
@@ -61,7 +72,6 @@ class ExamCubit extends Cubit<ExamState> {
 
     if (questionsResult is ApiSuccessResult<ExamQuestionsEntity>) {
       _questions = questionsResult.data.questions ?? [];
-      print('QUESTIONS COUNT: ${_questions.length}');
       _startTimer();
       emit(_buildLoaded());
     } else if (questionsResult is ApiErrorResult<ExamQuestionsEntity>) {

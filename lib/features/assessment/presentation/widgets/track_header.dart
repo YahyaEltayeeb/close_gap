@@ -2,14 +2,16 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 class ExamTrackHeader extends StatelessWidget {
-  final CameraController controller;
-  final Color cameraColor;
-
   const ExamTrackHeader({
     super.key,
     required this.controller,
     required this.cameraColor,
+    this.trackName,
   });
+
+  final CameraController controller;
+  final Color cameraColor;
+  final String? trackName;
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +21,17 @@ class ExamTrackHeader extends StatelessWidget {
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
-                'AI Track',
-                style: TextStyle(
+                _resolvedTrackName(),
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                   color: Color(0xFF111827),
                 ),
               ),
-              SizedBox(height: 2),
-              Text(
+              const SizedBox(height: 2),
+              const Text(
                 'Complete the following assessment',
                 style: TextStyle(fontSize: 12, color: Color(0xFF6B7280)),
               ),
@@ -46,7 +48,6 @@ class ExamTrackHeader extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            // ✅ تأكد إن الـ controller initialized قبل ما تعرضه
             child: controller.value.isInitialized
                 ? CameraPreview(controller)
                 : const SizedBox(),
@@ -54,5 +55,13 @@ class ExamTrackHeader extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String _resolvedTrackName() {
+    final normalizedTrackName = trackName?.trim() ?? '';
+    if (normalizedTrackName.isNotEmpty) {
+      return normalizedTrackName;
+    }
+    return 'Assessment Track';
   }
 }

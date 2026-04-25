@@ -14,6 +14,14 @@ class UserModelLoginDto {
   @JsonKey(name: "linkedin_url")
   final String? linkedinUrl;
   final String? role;
+  @JsonKey(name: "track_id")
+  final int? trackId;
+  @JsonKey(name: "track_name")
+  final String? trackName;
+  final int? year;
+  @JsonKey(name: "current_semester")
+  final int? currentSemester;
+  final Map<String, dynamic>? profile;
   @JsonKey(name: "is_active")
   final bool isActive;
 
@@ -28,7 +36,8 @@ class UserModelLoginDto {
   final List<dynamic>? courseProgress;
   final List<dynamic>? exams;
   final List<dynamic>? notifications;
-  final List<dynamic>? skill_gaps;
+  @JsonKey(name: "skill_gaps")
+  final List<dynamic>? skillGaps;
   final List<dynamic>? skills;
 
   UserModelLoginDto({
@@ -39,6 +48,11 @@ class UserModelLoginDto {
     required this.githubUrl,
     required this.linkedinUrl,
     required this.role,
+    required this.trackId,
+    required this.trackName,
+    required this.year,
+    required this.currentSemester,
+    required this.profile,
     required this.isActive,
     required this.createdAt,
     required this.lastLogin,
@@ -46,7 +60,7 @@ class UserModelLoginDto {
     required this.courseProgress,
     required this.exams,
     required this.notifications,
-    required this.skill_gaps,
+    required this.skillGaps,
     required this.skills,
   });
 

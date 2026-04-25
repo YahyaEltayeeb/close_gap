@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'failures.dart';
 
 sealed class ApiResult<T> {}
 
@@ -29,8 +28,6 @@ Future<ApiResult<T>> safeApiCall<T>(Future<T> Function() apiCall) async {
     final result = await apiCall();
     return ApiSuccessResult<T>(data: result);
   } on DioException catch (dioError) {
-    print("REAL ERROR => ${dioError.error}");
-    print("TYPE => ${dioError.type}");
     final responseData = dioError.response?.data;
     String? serverMessage;
 

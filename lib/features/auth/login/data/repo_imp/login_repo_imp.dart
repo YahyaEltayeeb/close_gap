@@ -6,6 +6,7 @@ import 'package:close_gap/features/auth/login/domain/entities/login_request_enti
 import 'package:close_gap/features/auth/login/domain/entities/user_model_login_entity.dart';
 import 'package:close_gap/features/auth/login/domain/repo/login_repo.dart';
 import 'package:injectable/injectable.dart';
+
 @Injectable(as: LoginRepo)
 class LoginRepoImp implements LoginRepo {
   final LoginDataSource _loginDataSource;
@@ -17,9 +18,26 @@ class LoginRepoImp implements LoginRepo {
   ) async {
     return await safeApiCall(() async {
       var result = await _loginDataSource.login(loginRequestEntity.toDto());
+      final user = result.user.toEntity();
 
-      _tokenService.saveToken(result.accessToken);
-      return result.user.toEntity();
+      await _tokenService.saveUserSession(
+        token: result.accessToken,
+        role: user.role,
+        name: user.name,
+        email: user.email,
+        trackId: user.trackId,
+        trackName: user.trackName,
+        year: user.year,
+        currentSemester: user.currentSemester,
+        pathType: user.pathType,
+        universityId: user.universityId,
+        universityName: user.universityName,
+        facultyId: user.facultyId,
+        facultyName: user.facultyName,
+        departmentId: user.departmentId,
+        departmentName: user.departmentName,
+      );
+      return user;
     });
   }
 }

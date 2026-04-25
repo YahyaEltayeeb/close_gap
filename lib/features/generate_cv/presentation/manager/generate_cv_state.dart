@@ -4,6 +4,15 @@ abstract class GenerateCvState {}
 
 class GenerateCvInitial extends GenerateCvState {}
 
+class GenerateCvLookupsLoading extends GenerateCvState {}
+
+class GenerateCvLookupsReady extends GenerateCvState {}
+
+class GenerateCvLookupsError extends GenerateCvState {
+  final String message;
+  GenerateCvLookupsError(this.message);
+}
+
 class GenerateCvLoading extends GenerateCvState {}
 
 class GenerateCvSuccess extends GenerateCvState {

@@ -3,6 +3,7 @@ import 'package:close_gap/features/auth/login/domain/entities/login_request_enti
 import 'package:close_gap/features/auth/login/domain/entities/user_model_login_entity.dart';
 import 'package:close_gap/features/auth/login/domain/repo/login_repo.dart';
 import 'package:injectable/injectable.dart';
+
 @injectable
 class LoginUseCase {
   final LoginRepo _loginRepo;

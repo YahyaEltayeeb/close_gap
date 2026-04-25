@@ -6,7 +6,14 @@ import 'package:close_gap/features/app_section/widget/custom_info_widget.dart';
 import 'package:close_gap/features/app_section/widget/custom_setting_widget.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+  const CustomDrawer({
+    super.key,
+    required this.currentIndex,
+    required this.onDestinationSelected,
+  });
+
+  final int currentIndex;
+  final ValueChanged<int> onDestinationSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -15,14 +22,25 @@ class CustomDrawer extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Drawer(
           width: context.width * .75,
+          backgroundColor: const Color(0xFFF7FAFF),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(28),
+          ),
           child: Padding(
-            padding: const EdgeInsets.all(25),
-            child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+            child: Column(
               children: [
-                verticalSpace(15),
-                CustomInfoWidget(),
-                CustomAllActionWidget(),
-                CustomSettingWidget(),
+                verticalSpace(4),
+                const CustomInfoWidget(),
+                const SizedBox(height: 12),
+                Expanded(
+                  child: CustomAllActionWidget(
+                    currentIndex: currentIndex,
+                    onDestinationSelected: onDestinationSelected,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                const CustomSettingWidget(),
               ],
             ),
           ),

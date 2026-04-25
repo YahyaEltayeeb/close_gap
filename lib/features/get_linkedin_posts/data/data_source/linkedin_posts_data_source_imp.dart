@@ -9,7 +9,10 @@ class LinkedinPostsDataSourceImp implements LinkedinPostsDataSource {
   LinkedinPostsDataSourceImp(this._apiServices);
 
   @override
-  Future<LinkedinPostsResponseDto> getLinkedinPostsDataSource() {
-    return _apiServices.getLinkedinPosts();
+  Future<LinkedinPostsResponseDto> getLinkedinPostsDataSource({
+    required String agentId,
+    String? track,
+  }) {
+    return _apiServices.getLinkedinPosts(agentId, track: track);
   }
 }

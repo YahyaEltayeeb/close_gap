@@ -2,6 +2,7 @@ import 'package:close_gap/config/routing/app_routes.dart';
 import 'package:close_gap/config/routing/routing_extensions.dart';
 import 'package:close_gap/config/theme/colors.dart';
 import 'package:close_gap/core/di/di.dart';
+import 'package:close_gap/core/services/token_service.dart';
 import 'package:close_gap/features/learning/advanced_plan/domain/entities/advanced_learning_plan_entity.dart';
 import 'package:close_gap/features/learning/advanced_plan/domain/entities/advanced_learning_plan_request_entity.dart';
 import 'package:close_gap/features/learning/advanced_plan/presentation/manager/advanced_learning_plan_state.dart';
@@ -11,126 +12,150 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AdvancedLearningPlanScreen extends StatelessWidget {
-  final int trackId;
+  final int? trackId;
+  final String? trackName;
 
-  const AdvancedLearningPlanScreen({super.key, this.trackId = 1});
+  const AdvancedLearningPlanScreen({super.key, this.trackId, this.trackName});
 
   @override
   Widget build(BuildContext context) {
+    final tokenService = getIt<TokenService>();
+    final savedTrackId = tokenService.getSavedTrackId();
+    final resolvedTrackId = trackId ?? savedTrackId ?? 1;
+    final resolvedTrackName =
+        trackName ??
+        (resolvedTrackId == savedTrackId
+            ? tokenService.getSavedTrackName()
+            : null);
+
     return BlocProvider(
-      create: (_) =>
-          getIt<AdvancedLearningPlanViewModel>()
-            ..getAdvancedLearningPlan(
-              AdvancedLearningPlanRequestEntity(trackId: trackId),
-            ),
-      child: _AdvancedLearningPlanView(trackId: trackId),
+      create: (_) => getIt<AdvancedLearningPlanViewModel>()
+        ..getAdvancedLearningPlan(
+          AdvancedLearningPlanRequestEntity(trackId: resolvedTrackId),
+        ),
+      child: _AdvancedLearningPlanView(
+        trackId: resolvedTrackId,
+        trackName: resolvedTrackName,
+      ),
     );
   }
 }
 
 class _AdvancedLearningPlanView extends StatelessWidget {
   final int trackId;
+  final String? trackName;
 
-  const _AdvancedLearningPlanView({required this.trackId});
+  const _AdvancedLearningPlanView({required this.trackId, this.trackName});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F7FB),
       body: SafeArea(
-        child: BlocBuilder<AdvancedLearningPlanViewModel, AdvancedLearningPlanState>(
-          builder: (context, state) {
-            if (state.isLoading && state.learningPlan == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
+        child:
+            BlocBuilder<
+              AdvancedLearningPlanViewModel,
+              AdvancedLearningPlanState
+            >(
+              builder: (context, state) {
+                if (state.isLoading && state.learningPlan == null) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-            if (state.errorMessage.isNotEmpty && state.learningPlan == null) {
-              return _AdvancedLearningPlanErrorView(
-                message: state.errorMessage,
-                onRetry: () => _loadPlan(context),
-              );
-            }
+                if (state.errorMessage.isNotEmpty &&
+                    state.learningPlan == null) {
+                  return _AdvancedLearningPlanErrorView(
+                    message: state.errorMessage,
+                    onRetry: () => _loadPlan(context),
+                  );
+                }
 
-            final learningPlan = state.learningPlan;
-            final roadmap = learningPlan?.roadmap ?? const <RoadmapWeekEntity>[];
+                final learningPlan = state.learningPlan;
+                final roadmap =
+                    learningPlan?.roadmap ?? const <RoadmapWeekEntity>[];
 
-            return RefreshIndicator(
-              onRefresh: () => _loadPlan(context),
-              child: ListView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-                children: [
-                  _PlanHeader(
-                    totalWeeks: roadmap.length,
-                    trackId: learningPlan?.trackId ?? trackId,
-                    totalHours: roadmap.fold<int>(
-                      0,
-                      (sum, item) => sum + item.hours,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  if (state.errorMessage.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: _InlineErrorBanner(
-                        message: state.errorMessage,
-                        onRetry: () => _loadPlan(context),
-                      ),
-                    ),
-                  if (roadmap.isEmpty)
-                    const _EmptyRoadmapCard()
-                  else
-                    ...roadmap.map(
-                      (week) => LearningWeekCard(
-                        week: week,
-                        initiallyExpanded: week.week == 1,
-                      ),
-                    ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        context.pushNamedAndRemoveUntil(
-                          AppRoutes.appSections,
-                          predicate: (route) => false,
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.lightPrimary,
-                        foregroundColor: AppColors.white,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18),
+                return RefreshIndicator(
+                  onRefresh: () => _loadPlan(context),
+                  child: ListView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+                    children: [
+                      _PlanHeader(
+                        totalWeeks: roadmap.length,
+                        trackId: learningPlan?.trackId ?? trackId,
+                        trackName: trackName,
+                        totalHours: roadmap.fold<int>(
+                          0,
+                          (sum, item) => sum + item.hours,
                         ),
                       ),
-                      child: const Text('Go to home'),
-                    ),
+                      const SizedBox(height: 20),
+                      if (state.errorMessage.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: _InlineErrorBanner(
+                            message: state.errorMessage,
+                            onRetry: () => _loadPlan(context),
+                          ),
+                        ),
+                      if (roadmap.isEmpty)
+                        const _EmptyRoadmapCard()
+                      else
+                        ...roadmap.map(
+                          (week) => LearningWeekCard(
+                            week: week,
+                            initiallyExpanded: week.week == 1,
+                          ),
+                        ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            context.pushNamedAndRemoveUntil(
+                              AppRoutes.appSections,
+                              predicate: (route) => false,
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.lightPrimary,
+                            foregroundColor: AppColors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                          ),
+                          child: const Text('Go to home'),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            );
-          },
-        ),
+                );
+              },
+            ),
       ),
     );
   }
 
   Future<void> _loadPlan(BuildContext context) {
-    return context.read<AdvancedLearningPlanViewModel>().getAdvancedLearningPlan(
-      AdvancedLearningPlanRequestEntity(trackId: trackId),
-    );
+    return context
+        .read<AdvancedLearningPlanViewModel>()
+        .getAdvancedLearningPlan(
+          AdvancedLearningPlanRequestEntity(trackId: trackId),
+        );
   }
 }
 
 class _PlanHeader extends StatelessWidget {
   final int totalWeeks;
   final int trackId;
+  final String? trackName;
   final int totalHours;
 
   const _PlanHeader({
     required this.totalWeeks,
     required this.trackId,
+    this.trackName,
     required this.totalHours,
   });
 
@@ -159,11 +184,11 @@ class _PlanHeader extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.18),
+              color: Colors.white.withValues(alpha: 0.18),
               borderRadius: BorderRadius.circular(999),
             ),
             child: Text(
-              'Track $trackId',
+              _resolvedTrackLabel(),
               style: const TextStyle(
                 color: AppColors.white,
                 fontSize: 12,
@@ -211,6 +236,14 @@ class _PlanHeader extends StatelessWidget {
       ),
     );
   }
+
+  String _resolvedTrackLabel() {
+    final normalizedTrackName = trackName?.trim() ?? '';
+    if (normalizedTrackName.isNotEmpty) {
+      return normalizedTrackName;
+    }
+    return 'Track $trackId';
+  }
 }
 
 class _HeaderMetric extends StatelessWidget {
@@ -224,9 +257,9 @@ class _HeaderMetric extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.14),
+        color: Colors.white.withValues(alpha: 0.14),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.white.withOpacity(0.16)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.16)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -357,10 +390,7 @@ class _EmptyRoadmapCard extends StatelessWidget {
           Text(
             'No roadmap items found for this track yet.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              color: AppColors.textSecondary,
-            ),
+            style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
           ),
         ],
       ),

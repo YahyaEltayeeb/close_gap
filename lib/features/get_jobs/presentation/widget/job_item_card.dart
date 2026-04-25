@@ -29,7 +29,7 @@ class JobItemCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _CompanyLogo(url: job.companyUrl),
+              _CompanyAvatar(companyName: job.companyName),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -41,18 +41,6 @@ class JobItemCard extends StatelessWidget {
                       '${job.companyName}. ${job.location}',
                       style: theme.textTheme.bodySmall,
                     ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        Text(l10n.timeAgo, style: theme.textTheme.labelSmall),
-                        const SizedBox(width: 4),
-                        Icon(
-                          Icons.public,
-                          size: 12,
-                          color: theme.colorScheme.onSurface,
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
@@ -61,19 +49,13 @@ class JobItemCard extends StatelessWidget {
           const SizedBox(height: 12),
           Row(
             children: [
-              JobTagChip(
-                label: job.isRemote ? l10n.remote : l10n.onSite,
-              ),
-              const SizedBox(width: 8),
-              JobTagChip(label: l10n.fullTime),
+              JobTagChip(label: job.isRemote ? l10n.remote : l10n.onSite),
               const Spacer(),
               GestureDetector(
                 onTap: onToggleSave,
                 child: Icon(
                   isSaved ? Icons.bookmark : Icons.bookmark_border,
-                  color: isSaved
-                      ? Colors.amber
-                      : theme.iconTheme.color,
+                  color: isSaved ? Colors.amber : theme.iconTheme.color,
                 ),
               ),
               const SizedBox(width: 12),
@@ -105,29 +87,32 @@ class JobItemCard extends StatelessWidget {
   }
 }
 
-class _CompanyLogo extends StatelessWidget {
-  final String url;
-  const _CompanyLogo({required this.url});
+class _CompanyAvatar extends StatelessWidget {
+  final String companyName;
+  const _CompanyAvatar({required this.companyName});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final initial = companyName.trim().isEmpty
+        ? ''
+        : companyName.trim().characters.first.toUpperCase();
     return ClipRRect(
       borderRadius: BorderRadius.circular(6),
       child: Container(
         width: 52,
         height: 52,
-        color: theme.colorScheme.onSurface.withOpacity(0.1),
-        child: url.isNotEmpty
-            ? Image.network(
-                url,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Icon(
-                  Icons.business,
-                  color: theme.iconTheme.color,
+        color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+        alignment: Alignment.center,
+        child: initial.isEmpty
+            ? Icon(Icons.business, color: theme.iconTheme.color)
+            : Text(
+                initial,
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w700,
                 ),
-              )
-            : Icon(Icons.business, color: theme.iconTheme.color),
+              ),
       ),
     );
   }

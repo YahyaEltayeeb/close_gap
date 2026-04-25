@@ -5,8 +5,10 @@ import 'package:close_gap/features/assessment/presentation/widgets/info_row.dart
 import 'package:flutter/material.dart';
 
 class InstructionsScreen extends StatelessWidget {
-  final int trackId;
-  const InstructionsScreen({super.key, required this.trackId});
+  const InstructionsScreen({super.key, this.trackId, this.trackName});
+
+  final int? trackId;
+  final String? trackName;
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +24,11 @@ class InstructionsScreen extends StatelessWidget {
               const SizedBox(height: 20),
               Center(
                 child: Text(
-                  'Assessment',
+                  _resolvedTitle(),
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.w800,
-                    color: Colors.black.withOpacity(0.88),
+                    color: Colors.black.withValues(alpha: 0.88),
                   ),
                 ),
               ),
@@ -38,7 +40,7 @@ class InstructionsScreen extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     height: 1.55,
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withValues(alpha: 0.5),
                   ),
                 ),
               ),
@@ -49,7 +51,7 @@ class InstructionsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
+                      color: Colors.black.withValues(alpha: 0.06),
                       blurRadius: 16,
                       offset: const Offset(0, 4),
                     ),
@@ -167,10 +169,17 @@ class InstructionsScreen extends StatelessWidget {
                         width: double.infinity,
                         height: 40,
                         child: ElevatedButton(
-                          onPressed: () {
-                            context.pushNamed(AppRoutes.permissionpage, arguments:trackId);
-
-                          },
+                          onPressed: trackId == null
+                              ? null
+                              : () {
+                                  context.pushNamed(
+                                    AppRoutes.permissionpage,
+                                    arguments: {
+                                      'trackId': trackId,
+                                      'trackName': trackName,
+                                    },
+                                  );
+                                },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF0084FF),
                             foregroundColor: Colors.white,
@@ -198,5 +207,13 @@ class InstructionsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _resolvedTitle() {
+    final normalizedTrackName = trackName?.trim() ?? '';
+    if (normalizedTrackName.isNotEmpty) {
+      return '$normalizedTrackName Assessment';
+    }
+    return 'Assessment';
   }
 }

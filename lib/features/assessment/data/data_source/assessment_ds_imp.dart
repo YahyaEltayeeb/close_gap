@@ -30,12 +30,16 @@ class AssessmentDsImp implements AssessmentDs {
 
   @override
   Future<ExamquestionsResponse> getExamQuestions({
+    required String track,
     required String level,
     required int page,
     required int perPage,
   }) {
-    return _apiServices.getExamQuestions( 
-     
+    return _apiServices.getExamQuestions(
+      track,
+      level: level,
+      page: page,
+      perPage: perPage,
     );
   }
 

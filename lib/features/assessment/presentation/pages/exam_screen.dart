@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
+import 'package:close_gap/config/routing/app_routes.dart';
+import 'package:close_gap/core/di/di.dart';
 import 'package:close_gap/features/assessment/presentation/manager/exam/exam_cubit.dart';
 import 'package:close_gap/features/assessment/presentation/widgets/instructions_card.dart';
 import 'package:close_gap/features/assessment/presentation/widgets/question_card.dart';
@@ -7,21 +11,20 @@ import 'package:close_gap/features/assessment/presentation/widgets/top_bar.dart'
 import 'package:close_gap/features/assessment/presentation/widgets/track_header.dart';
 import 'package:close_gap/features/assessment/presentation/widgets/vision_status.dart';
 import 'package:close_gap/features/exam_monitoring/presentation/manager/vision_check_cubit.dart';
-import 'package:close_gap/config/routing/app_routes.dart';
-import 'package:close_gap/core/di/di.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dart:io';
 
 class ExamScreen extends StatefulWidget {
-  final CameraController controller;
-  final int examId;
-
   const ExamScreen({
     super.key,
     required this.controller,
-    required this.examId,
+    required this.trackId,
+    this.trackName,
   });
+
+  final CameraController controller;
+  final int trackId;
+  final String? trackName;
 
   @override
   State<ExamScreen> createState() => _ExamScreenState();
@@ -29,16 +32,15 @@ class ExamScreen extends StatefulWidget {
 
 class _ExamScreenState extends State<ExamScreen> {
   late VisionCheckCubit _visionCheckCubit;
-  bool _isNavigating = false; // ✅ منع double navigation
+  bool _isNavigating = false;
 
   @override
   void initState() {
     super.initState();
     _visionCheckCubit = getIt<VisionCheckCubit>();
     _visionCheckCubit.startMonitoring(
-      examId: widget.examId,
+      examId: widget.trackId,
       captureImage: () async {
-        // ✅ حماية الكاميرا
         if (!mounted) {
           throw Exception("Widget disposed");
         }
@@ -65,14 +67,17 @@ class _ExamScreenState extends State<ExamScreen> {
   }
 
   void _navigateToResult(Map<String, dynamic> args) {
-    // ✅ منع navigation مرتين
     if (_isNavigating || !mounted) return;
     _isNavigating = true;
     _visionCheckCubit.stopMonitoring();
     Navigator.pushReplacementNamed(
       context,
       AppRoutes.examResult,
-      arguments: {...args, 'trackId': widget.examId},
+      arguments: {
+        ...args,
+        'trackId': widget.trackId,
+        'trackName': widget.trackName,
+      },
     );
   }
 
@@ -146,13 +151,11 @@ class _ExamScreenState extends State<ExamScreen> {
                       ExamTopBar(
                         remainingSeconds: examState.remainingSeconds,
                         formatTime: _formatTime,
-                        onEndTest: () =>
-                            context.read<ExamCubit>().finishExam(),
+                        onEndTest: () => context.read<ExamCubit>().finishExam(),
                       ),
                       Expanded(
                         child: SingleChildScrollView(
-                          padding:
-                              const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -160,6 +163,7 @@ class _ExamScreenState extends State<ExamScreen> {
                               ExamTrackHeader(
                                 controller: widget.controller,
                                 cameraColor: cameraColor,
+                                trackName: widget.trackName,
                               ),
                               const SizedBox(height: 16),
                               ExamQuestionCard(
@@ -173,7 +177,7 @@ class _ExamScreenState extends State<ExamScreen> {
                                 onNext: () {
                                   final isLast =
                                       examState.currentIndex ==
-                                          examState.questions.length - 1;
+                                      examState.questions.length - 1;
                                   if (isLast) {
                                     context.read<ExamCubit>().finishExam();
                                   } else {
@@ -188,16 +192,18 @@ class _ExamScreenState extends State<ExamScreen> {
                                 answers: examState.answers,
                                 questions: examState.questions,
                                 onTap: (i) {
-                                  for (var j = examState.currentIndex;
-                                      j < i;
-                                      j++) {
-                                    context
-                                        .read<ExamCubit>()
-                                        .nextQuestion();
+                                  for (
+                                    var j = examState.currentIndex;
+                                    j < i;
+                                    j++
+                                  ) {
+                                    context.read<ExamCubit>().nextQuestion();
                                   }
-                                  for (var j = examState.currentIndex;
-                                      j > i;
-                                      j--) {
+                                  for (
+                                    var j = examState.currentIndex;
+                                    j > i;
+                                    j--
+                                  ) {
                                     context
                                         .read<ExamCubit>()
                                         .previousQuestion();
@@ -215,20 +221,24 @@ class _ExamScreenState extends State<ExamScreen> {
                                   color: const Color(0xFFFFFBEB),
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
-                                      color: const Color(0xFFFDE68A)),
+                                    color: const Color(0xFFFDE68A),
+                                  ),
                                 ),
                                 child: Row(
                                   children: const [
-                                    Icon(Icons.warning_amber_rounded,
-                                        color: Color(0xFFF59E0B),
-                                        size: 18),
+                                    Icon(
+                                      Icons.warning_amber_rounded,
+                                      color: Color(0xFFF59E0B),
+                                      size: 18,
+                                    ),
                                     SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
                                         'Please do not leave the full screen, any suspicious activity will be flagged',
                                         style: TextStyle(
-                                            fontSize: 12,
-                                            color: Color(0xFF92400E)),
+                                          fontSize: 12,
+                                          color: Color(0xFF92400E),
+                                        ),
                                       ),
                                     ),
                                   ],
