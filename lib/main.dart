@@ -18,13 +18,13 @@ void main() async {
   runApp(
     BlocProvider(
       create: (context) => getIt<LocaleThemeCubit>(),
-      child: const CloseGap(),
+      child: const NexusApp(),
     ),
   );
 }
 
-class CloseGap extends StatelessWidget {
-  const CloseGap({super.key});
+class NexusApp extends StatelessWidget {
+  const NexusApp({super.key});
 
   @override
   Widget build(BuildContext context) {

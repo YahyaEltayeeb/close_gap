@@ -35,6 +35,6 @@ abstract class AppConstants {
   static const String helpContentKey = "help_screen_content";
   static const String privacyPolicyContentKey = "privacy_policy";
   static const String securityRolesContentKey = "security_roles_config";
-  static const String jobsAgentId = "2075279981825898";
-  static const String linkedinPostsAgentId = "5505082972463922";
+  static const String jobsAgentId = "8484319781124615";
+  static const String linkedinPostsAgentId = "4978537627641635";
 }

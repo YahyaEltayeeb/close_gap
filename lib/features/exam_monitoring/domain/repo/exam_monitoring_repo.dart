@@ -3,5 +3,7 @@ import 'package:close_gap/features/exam_monitoring/data/models/request/vision_ch
 import 'package:close_gap/features/exam_monitoring/domain/entities/vision_check_camera_entity.dart';
 
 abstract class ExamMonitoringRepo {
-  Future<ApiResult<VisionCheckCameraEntity>> visionCheck(VisionCheckCameraRequest visionCheckCameraRequest);
+  Future<ApiResult<VisionCheckCameraEntity>> visionCheck(
+    VisionCheckCameraRequest visionCheckCameraRequest,
+  );
 }
