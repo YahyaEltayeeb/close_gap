@@ -9,12 +9,14 @@ class ExamInitial extends ExamState {}
 class ExamLoading extends ExamState {}
 
 class ExamLoaded extends ExamState {
+  final int examId;
   final List<QuestionEntity> questions;
   final int currentIndex;
   final Map<int, int> answers;
   final int remainingSeconds;
 
   const ExamLoaded({
+    required this.examId,
     required this.questions,
     required this.currentIndex,
     required this.answers,
@@ -40,8 +42,5 @@ class ExamError extends ExamState {
   const ExamError(this.message);
 }
 
-class ExamWarning extends ExamState {
-  final int strikes;
-
-  const ExamWarning(this.strikes);
-}
+// ✅ ExamWarning اتحذف لأنها مش بتتستخدم
+// الـ warning بيتعامل معاه VisionCheckCubit مش ExamCubit

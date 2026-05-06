@@ -14,6 +14,10 @@ class VisionCheckCameraEntity {
 
 class ResultEntity {
   final bool? phoneDetected;
-   
-  const ResultEntity({this.phoneDetected});
+  final bool? eyeContact;
+
+  const ResultEntity({
+    this.phoneDetected,
+    this.eyeContact,
+  });
 }

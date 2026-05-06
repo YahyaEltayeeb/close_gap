@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:close_gap/core/network/api_results.dart';
 import 'package:close_gap/core/services/token_service.dart';
 import 'package:close_gap/features/assessment/data/model/request/exam_answer_request.dart';
@@ -33,7 +32,7 @@ class ExamCubit extends Cubit<ExamState> {
 
   bool _isFinishing = false;
 
-  Future<void> startExam({required int trackId}) async {
+  Future<void> startExam( {required int trackId}) async {
     emit(ExamLoading());
 
     _currentIndex = 0;
@@ -156,6 +155,7 @@ class ExamCubit extends Cubit<ExamState> {
 
   ExamLoaded _buildLoaded() {
     return ExamLoaded(
+     examId: _examId!,
       questions: _questions,
       currentIndex: _currentIndex,
       answers: _answers,

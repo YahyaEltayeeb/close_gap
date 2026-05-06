@@ -1,5 +1,6 @@
 import 'package:close_gap/config/routing/app_routes.dart';
 import 'package:close_gap/config/routing/routing_extensions.dart';
+import 'package:close_gap/features/assessment/presentation/manager/exam/exam_cubit.dart';
 import 'package:close_gap/features/assessment/presentation/manager/permission/exam_permission_State.dart';
 import 'package:close_gap/features/assessment/presentation/manager/permission/exam_permission_cubit.dart';
 import 'package:flutter/material.dart';
@@ -40,9 +41,7 @@ class ExamPermissionScreen extends StatelessWidget {
                     ),
                     actions: [
                       TextButton(
-                        onPressed: () {
-                          openAppSettings();
-                        },
+                        onPressed: () => openAppSettings(),
                         child: const Text("Open Settings"),
                       ),
                     ],
@@ -51,9 +50,9 @@ class ExamPermissionScreen extends StatelessWidget {
               }
 
               if (state is ExamPermissionError) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(SnackBar(content: Text(state.message)));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.message)),
+                );
               }
             },
             child: Padding(
@@ -111,17 +110,53 @@ class ExamPermissionScreen extends StatelessWidget {
                             const SizedBox(height: 20),
                             PermissionButton(
                               enabled: cubit.isCameraOn && trackId != null,
-                              onPressed: () {
-                                if (cubit.isCameraOn && trackId != null) {
-                                  final controller = cubit.controller!;
-                                  cubit.controller = null;
+                              onPressed: () async {
+                                // ✅ FIX 1: خد الـ controller بدون !
+                                final controller = cubit.controller;
+
+                                // ✅ FIX 2: تحقق من null قبل أي حاجة
+                                if (controller == null ||
+                                    !cubit.isCameraOn ||
+                                    trackId == null) {
+                                  return;
+                                }
+
+                                // ✅ فاضي الـ controller من الـ cubit
+                                cubit.controller = null;
+
+                                // ✅ FIX 3: استلم نفس الـ ExamCubit instance
+                                final examCubit = context.read<ExamCubit>();
+
+                                // ✅ FIX 4: ابدأ الـ exam واستنى الـ future
+                                await examCubit.startExam(trackId: trackId!);
+
+                                // ✅ FIX 5: اقرأ الـ state مباشرة بعد ما startExam خلص
+                                final examState = examCubit.state;
+
+                                // ✅ FIX 6: تأكد إن الـ context لسه موجود
+                                if (!context.mounted) return;
+
+                                if (examState is ExamLoaded) {
                                   context.pushNamed(
                                     AppRoutes.examScreen,
                                     arguments: {
                                       'controller': controller,
                                       'trackId': trackId,
                                       'trackName': trackName,
+                                      'examId': examState.examId,
+                                      // ✅ FIX 7: ابعت نفس الـ instance
+                                      'examCubit': examCubit,
                                     },
+                                  );
+                                } else if (examState is ExamError) {
+                                  // ✅ رجّع الـ controller لو فشل
+                                  cubit.controller = controller;
+
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(examState.message),
+                                      backgroundColor: Colors.red,
+                                    ),
                                   );
                                 }
                               },

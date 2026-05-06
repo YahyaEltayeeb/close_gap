@@ -19,11 +19,13 @@ class ExamScreen extends StatefulWidget {
     super.key,
     required this.controller,
     required this.trackId,
+    required this.examId,
     this.trackName,
   });
 
   final CameraController controller;
   final int trackId;
+  final int examId;
   final String? trackName;
 
   @override
@@ -33,24 +35,38 @@ class ExamScreen extends StatefulWidget {
 class _ExamScreenState extends State<ExamScreen> {
   late VisionCheckCubit _visionCheckCubit;
   bool _isNavigating = false;
+  bool _monitoringStarted = false;
 
   @override
   void initState() {
     super.initState();
     _visionCheckCubit = getIt<VisionCheckCubit>();
-    _visionCheckCubit.startMonitoring(
-      examId: widget.trackId,
-      captureImage: () async {
-        if (!mounted) {
-          throw Exception("Widget disposed");
-        }
-        if (!widget.controller.value.isInitialized) {
-          throw Exception("Camera not ready");
-        }
-        final xfile = await widget.controller.takePicture();
-        return File(xfile.path);
-      },
-    );
+  }
+
+  void _startMonitoringAfterExamLoaded() {
+    if (_monitoringStarted) return;
+
+    _monitoringStarted = true;
+
+    Future.delayed(const Duration(seconds: 5), () {
+      if (!mounted || _isNavigating) return;
+
+      _visionCheckCubit.startMonitoring(
+        examId: widget.examId,
+        captureImage: () async {
+          if (!mounted) {
+            throw Exception("Widget disposed");
+          }
+
+          if (!widget.controller.value.isInitialized) {
+            throw Exception("Camera not ready");
+          }
+
+          final xfile = await widget.controller.takePicture();
+          return File(xfile.path);
+        },
+      );
+    });
   }
 
   @override
@@ -68,8 +84,10 @@ class _ExamScreenState extends State<ExamScreen> {
 
   void _navigateToResult(Map<String, dynamic> args) {
     if (_isNavigating || !mounted) return;
+
     _isNavigating = true;
     _visionCheckCubit.stopMonitoring();
+
     Navigator.pushReplacementNamed(
       context,
       AppRoutes.examResult,
@@ -81,6 +99,79 @@ class _ExamScreenState extends State<ExamScreen> {
     );
   }
 
+  // ✅ Warning Dialog للإنذارات
+  void _showWarningDialog(VisionCheckWarning visionState) {
+    if (!mounted) return;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: Row(
+          children: [
+            const Icon(
+              Icons.warning_amber_rounded,
+              color: Color(0xFFF59E0B),
+              size: 28,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              'Warning ${visionState.strikes}/2',
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFFB45309),
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              visionState.reason,
+              style: const TextStyle(fontSize: 14),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFEF3C7),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                visionState.strikes >= 2
+                    ? '⚠️ This is your final warning! Next violation will end your exam.'
+                    : '⚠️ You have ${2 - visionState.strikes} warning(s) remaining.',
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Color(0xFF92400E),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            style: TextButton.styleFrom(
+              foregroundColor: const Color(0xFF2563EB),
+            ),
+            child: const Text(
+              'I Understand',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
@@ -88,9 +179,20 @@ class _ExamScreenState extends State<ExamScreen> {
         BlocListener<VisionCheckCubit, VisionCheckState>(
           bloc: _visionCheckCubit,
           listener: (context, visionState) {
+            // ✅ إنذار أول وتاني
+            if (visionState is VisionCheckWarning) {
+              _showWarningDialog(visionState);
+            }
+
+            // ✅ تالت مرة = طرد من الامتحان
             if (visionState is VisionCheckInvalidated) {
               context.read<ExamCubit>().forceFinishExam();
-              _navigateToResult({'invalidated': true});
+
+              _navigateToResult({
+                'invalidated': true,
+                'reason': visionState.reason,
+                'strikes': visionState.strikes,
+              });
             }
           },
         ),
@@ -102,6 +204,7 @@ class _ExamScreenState extends State<ExamScreen> {
                 'result': examState.result,
               });
             }
+
             if (examState is ExamInvalidated) {
               _navigateToResult({'invalidated': true});
             }
@@ -134,6 +237,8 @@ class _ExamScreenState extends State<ExamScreen> {
               ),
             );
           }
+
+          _startMonitoringAfterExamLoaded();
 
           return BlocBuilder<VisionCheckCubit, VisionCheckState>(
             bloc: _visionCheckCubit,
@@ -178,6 +283,7 @@ class _ExamScreenState extends State<ExamScreen> {
                                   final isLast =
                                       examState.currentIndex ==
                                       examState.questions.length - 1;
+
                                   if (isLast) {
                                     context.read<ExamCubit>().finishExam();
                                   } else {
@@ -199,6 +305,7 @@ class _ExamScreenState extends State<ExamScreen> {
                                   ) {
                                     context.read<ExamCubit>().nextQuestion();
                                   }
+
                                   for (
                                     var j = examState.currentIndex;
                                     j > i;
@@ -224,8 +331,8 @@ class _ExamScreenState extends State<ExamScreen> {
                                     color: const Color(0xFFFDE68A),
                                   ),
                                 ),
-                                child: Row(
-                                  children: const [
+                                child: const Row(
+                                  children: [
                                     Icon(
                                       Icons.warning_amber_rounded,
                                       color: Color(0xFFF59E0B),

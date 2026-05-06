@@ -40,10 +40,13 @@ class RouteGenerator {
     switch (settings.name) {
       case AppRoutes.login:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
+
       case AppRoutes.appSections:
         return MaterialPageRoute(builder: (_) => const AppSection());
+
       case AppRoutes.home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
+
       case AppRoutes.teacherHome:
         final user = settings.arguments as UserModelLoginEntity?;
         return MaterialPageRoute(
@@ -52,17 +55,21 @@ class RouteGenerator {
             userRole: user?.role ?? 'teacher',
           ),
         );
+
       case AppRoutes.createExam:
         return MaterialPageRoute(builder: (_) => const CreateExamScreen());
+
       case AppRoutes.addExamQuestion:
         final exam = settings.arguments as AcademicExamEntity;
         return MaterialPageRoute(
           builder: (_) => AddExamQuestionScreen(exam: exam),
         );
+
       case AppRoutes.teacherPastExams:
         return MaterialPageRoute(
           builder: (_) => const TeacherPastExamsScreen(),
         );
+
       case AppRoutes.teacherExamResults:
         final exam = settings.arguments as TeacherExamListItemEntity;
         return MaterialPageRoute(
@@ -71,13 +78,17 @@ class RouteGenerator {
 
       case AppRoutes.register:
         return MaterialPageRoute(builder: (context) => const RegisterScreen());
+
       case AppRoutes.stuRegister:
         final requestEntity = settings.arguments as RegisterRequestEntity;
         return MaterialPageRoute(
-          builder: (context) => StuRegisterScreen(requestEntity: requestEntity),
+          builder: (context) =>
+              StuRegisterScreen(requestEntity: requestEntity),
         );
+
       case AppRoutes.getJobs:
         return MaterialPageRoute(builder: (_) => GetJobsScreen());
+
       case AppRoutes.instructionspage:
         final args = settings.arguments;
         final tokenService = getIt<TokenService>();
@@ -91,45 +102,62 @@ class RouteGenerator {
           builder: (_) =>
               InstructionsScreen(trackId: trackId, trackName: trackName),
         );
+
       case AppRoutes.permissionpage:
         final args = settings.arguments;
         final tokenService = getIt<TokenService>();
+
         final trackId = args is Map<String, dynamic>
             ? args['trackId'] as int? ?? tokenService.getSavedTrackId()
             : args as int? ?? tokenService.getSavedTrackId();
+
         final trackName = args is Map<String, dynamic>
             ? args['trackName'] as String? ?? tokenService.getSavedTrackName()
             : tokenService.getSavedTrackName();
+
+        // ✅ FIX: اعمل instance واحد بس وابعته لـ ExamPermissionScreen
+        final examCubit = getIt<ExamCubit>();
+
         return MaterialPageRoute(
-          builder: (_) =>
-              ExamPermissionScreen(trackId: trackId, trackName: trackName),
-        );
-      case AppRoutes.examScreen:
-        final args = settings.arguments as Map<String, dynamic>;
-        final controller = args['controller'] as CameraController;
-        final trackId = args['trackId'] as int;
-        final trackName =
-            args['trackName'] as String? ??
-            getIt<TokenService>().getSavedTrackName();
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => getIt<ExamCubit>()..startExam(trackId: trackId),
-            child: ExamScreen(
-              controller: controller,
+          builder: (_) => BlocProvider.value(
+            value: examCubit,
+            child: ExamPermissionScreen(
               trackId: trackId,
               trackName: trackName,
             ),
           ),
         );
+
+      case AppRoutes.examScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        final controller = args['controller'] as CameraController;
+        final trackId = args['trackId'] as int;
+        final trackName = args['trackName'] as String? ??
+            getIt<TokenService>().getSavedTrackName();
+        final examId = args['examId'] as int;
+
+        // ✅ FIX: استلم نفس الـ ExamCubit instance من الـ arguments
+        final examCubit = args['examCubit'] as ExamCubit;
+
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider.value(
+            value: examCubit, // ✅ نفس الـ instance مش جديد
+            child: ExamScreen(
+              controller: controller,
+              trackId: trackId,
+              trackName: trackName,
+              examId: examId,
+            ),
+          ),
+        );
+
       case AppRoutes.examResult:
         final args = settings.arguments as Map<String, dynamic>;
         final invalidated = args['invalidated'] as bool;
         final result = args['result'] as ExamFinishEntity?;
-        final trackId =
-            (args['trackId'] as int?) ??
+        final trackId = (args['trackId'] as int?) ??
             getIt<TokenService>().getSavedTrackId();
-        final trackName =
-            args['trackName'] as String? ??
+        final trackName = args['trackName'] as String? ??
             getIt<TokenService>().getSavedTrackName();
         return MaterialPageRoute(
           builder: (_) => ExamResultScreen(
@@ -139,30 +167,35 @@ class RouteGenerator {
             trackName: trackName,
           ),
         );
+
       case AppRoutes.learningPlan:
-        final trackId =
-            (settings.arguments as int?) ??
+        final trackId = (settings.arguments as int?) ??
             getIt<TokenService>().getSavedTrackId() ??
             1;
         return MaterialPageRoute(
           builder: (_) => AdvancedLearningPlanScreen(trackId: trackId),
         );
+
       case AppRoutes.projects:
         return MaterialPageRoute(builder: (_) => const ProjectsScreen());
+
       case AppRoutes.experience:
         return MaterialPageRoute(builder: (_) => const ExperienceScreen());
+
       case AppRoutes.certificates:
         return MaterialPageRoute(builder: (_) => const CertificatesScreen());
+
       case AppRoutes.notifications:
         return MaterialPageRoute(builder: (_) => const NotificationsScreen());
+
       case AppRoutes.marketTrends:
-        final trackId =
-            (settings.arguments as int?) ??
+        final trackId = (settings.arguments as int?) ??
             getIt<TokenService>().getSavedTrackId() ??
             1;
         return MaterialPageRoute(
           builder: (_) => MarketTrendsScreen(trackId: trackId),
         );
+
       case AppRoutes.academicCourse:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
@@ -170,6 +203,7 @@ class RouteGenerator {
             child: const AcademicCoursesScreen(),
           ),
         );
+
       default:
         return unDefinedRoute();
     }

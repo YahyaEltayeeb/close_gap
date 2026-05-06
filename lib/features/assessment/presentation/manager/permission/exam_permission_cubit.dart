@@ -3,12 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:close_gap/features/assessment/presentation/manager/permission/exam_permission_State.dart';
+
 @Injectable()
 class ExamPermissionCubit extends Cubit<ExamPermissionState> {
   ExamPermissionCubit() : super(ExamPermissionInitial());
 
   CameraController? controller;
-CameraController? get cameraController => controller;
+  CameraController? get cameraController => controller;
 
   /// Toggle camera (فتح / قفل)
   Future<void> handleCamera() async {
@@ -18,7 +19,7 @@ CameraController? get cameraController => controller;
       return;
     }
 
-    // لو مش شغالة → اطلب permission و شغلها
+    // لو مش شغالة → اطلب permission وشغلها
     emit(ExamPermissionLoading());
 
     final status = await Permission.camera.request();
@@ -64,20 +65,25 @@ CameraController? get cameraController => controller;
   /// حالة الكاميرا
   bool get isCameraOn => state is ExamPermissionCameraOn;
 
-  @override
-  Future<void> close() {
-    return super.close();
-  }
+  /// التقاط صورة
   Future<XFile?> takePicture() async {
-  if (controller == null || !controller!.value.isInitialized) {
-    return null;
+    if (controller == null || !controller!.value.isInitialized) {
+      return null;
+    }
+
+    try {
+      final file = await controller!.takePicture();
+      return file;
+    } catch (e) {
+      return null;
+    }
   }
 
-  try {
-    final file = await controller!.takePicture();
-    return file;
-  } catch (e) {
-    return null;
+  @override
+  Future<void> close() {
+    // ✅ FIX: dispose الـ controller عشان مفيش memory leak
+    controller?.dispose();
+    controller = null;
+    return super.close();
   }
-}
 }

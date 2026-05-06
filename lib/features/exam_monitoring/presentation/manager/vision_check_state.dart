@@ -4,27 +4,39 @@ abstract class VisionCheckState {
   const VisionCheckState();
 }
 
-class VisionCheckInitial extends VisionCheckState {}
-class VisionCheckRunning extends VisionCheckState {}
-class VisionCheckMonitoring extends VisionCheckState {}
-class VisionCheckSafe extends VisionCheckState {}
-class VisionCheckWarning extends VisionCheckState {
-  final int strikes;
-
-  const VisionCheckWarning(this.strikes);
+class VisionCheckInitial extends VisionCheckState {
+  const VisionCheckInitial();
 }
 
-class VisionCheckCheating extends VisionCheckState {
+class VisionCheckRunning extends VisionCheckState {
+  const VisionCheckRunning();
+}
+
+// ✅ VisionCheckMonitoring اتحذف لأنها مش بتتستخدم
+
+class VisionCheckSafe extends VisionCheckState {
+  const VisionCheckSafe();
+}
+
+class VisionCheckWarning extends VisionCheckState {
   final int strikes;
   final String reason;
 
-  const VisionCheckCheating({
+  const VisionCheckWarning({
     required this.strikes,
     required this.reason,
   });
 }
 
-class VisionCheckInvalidated extends VisionCheckState {}
+class VisionCheckInvalidated extends VisionCheckState {
+  final int strikes;
+  final String reason;
+
+  const VisionCheckInvalidated({
+    required this.strikes,
+    required this.reason,
+  });
+}
 
 class VisionCheckError extends VisionCheckState {
   final String message;
