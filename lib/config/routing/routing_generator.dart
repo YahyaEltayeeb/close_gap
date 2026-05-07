@@ -30,6 +30,7 @@ import 'package:close_gap/features/teacher_exams/presentation/pages/create_exam_
 import 'package:close_gap/features/teacher_past_exams/domain/entities/teacher_exam_list_item_entity.dart';
 import 'package:close_gap/features/teacher_past_exams/presentation/pages/teacher_exam_results_screen.dart';
 import 'package:close_gap/features/teacher_past_exams/presentation/pages/teacher_past_exams_screen.dart';
+import 'package:close_gap/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,6 +39,8 @@ import 'app_routes.dart';
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings settings) {
     switch (settings.name) {
+      case AppRoutes.splash:
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
       case AppRoutes.login:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
 

@@ -1,3 +1,4 @@
+import 'package:close_gap/config/routing/app_routes.dart';
 import 'package:close_gap/config/routing/routing_generator.dart';
 import 'package:close_gap/config/theme/app_theme.dart';
 import 'package:close_gap/core/l10n/translations/app_localizations.dart';
@@ -37,6 +38,7 @@ class NexusApp extends StatelessWidget {
           theme: state.isDark ? AppTheme.darkTheme : AppTheme.lightTheme,
           debugShowCheckedModeBanner: false,
           onGenerateRoute: RouteGenerator.getRoute,
+          initialRoute: AppRoutes.splash,
           home: const _StartupGate(),
         );
       },
