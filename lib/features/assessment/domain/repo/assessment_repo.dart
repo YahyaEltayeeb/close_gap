@@ -16,7 +16,5 @@ abstract class AssessmentRepo {
   Future<ApiResult<ExamQuestionsEntity>> getExamQuestions({
     required String track,
     required String level,
-    required int page,
-    required int perPage,
   });
 }

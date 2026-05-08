@@ -26,14 +26,12 @@ class AssessmentUseCase {
   Future<ApiResult<ExamQuestionsEntity>> getExamQuestions({
     required String track,
     required String level,
-    required int page,
-    required int perPage,
+    
   }) {
     return _assessmentRepo.getExamQuestions(
       track: track,
       level: level,
-      page: page,
-      perPage: perPage,
+     
     );
   }
   Future<ApiResult<StartExamEntity>> getStartExam(StartExamRequest request) {

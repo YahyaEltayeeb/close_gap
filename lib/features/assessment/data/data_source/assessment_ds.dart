@@ -15,7 +15,6 @@ abstract class AssessmentDs {
   Future<ExamquestionsResponse> getExamQuestions({
     required String track,
     required String level,
-    required int page,
-    required int perPage,
+   
   });
 }

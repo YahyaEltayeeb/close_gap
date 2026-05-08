@@ -65,8 +65,7 @@ class ExamCubit extends Cubit<ExamState> {
     final questionsResult = await _useCase.getExamQuestions(
       track: savedTrackName.trim(),
       level: 'basic',
-      page: 1,
-      perPage: 100,
+    
     );
 
     if (questionsResult is ApiSuccessResult<ExamQuestionsEntity>) {

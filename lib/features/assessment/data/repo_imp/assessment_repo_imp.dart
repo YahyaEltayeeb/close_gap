@@ -42,15 +42,11 @@ class AssessmentRepoImp implements AssessmentRepo {
   Future<ApiResult<ExamQuestionsEntity>> getExamQuestions({
     required String track,
     required String level,
-    required int page,
-    required int perPage,
   }) async {
     return await safeApiCall(() async {
       final result = await _assessmentDs.getExamQuestions(
         track: track,
         level: level,
-        page: page,
-        perPage: perPage,
       );
       return result.toEntity();
     });

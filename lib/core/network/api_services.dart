@@ -235,8 +235,7 @@ abstract class ApiServices {
   Future<ExamquestionsResponse> getExamQuestions(
     @Path('track') String track, {
     @Query('level') String? level,
-    @Query('page') int? page,
-    @Query('per_page') int? perPage,
+  
   });
   @POST(EndPoints.visionCheck)
   Future<VisionCheckCameraResponse> visionCheck(
