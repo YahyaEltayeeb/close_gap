@@ -52,14 +52,6 @@ class CustomAllActionWidget extends StatelessWidget {
               onTap: () => _selectTab(context, 3),
             ),
             CustomRowAction(
-              title: locale.learning_plan,
-              icon: FontAwesomeIcons.calendarCheck,
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pushNamed(AppRoutes.learningPlan);
-              },
-            ),
-            CustomRowAction(
               title: locale.certificates,
               icon: FontAwesomeIcons.bookOpenReader,
               onTap: () {
