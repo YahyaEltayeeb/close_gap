@@ -19,15 +19,15 @@ class PermissionButton extends StatelessWidget {
         
         onPressed: enabled ? onPressed : null, 
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          backgroundColor: WidgetStateProperty.resolveWith<Color>(
             (states) {
-              if (states.contains(MaterialState.disabled)) {
+              if (states.contains(WidgetState.disabled)) {
                 return Colors.grey;
               }
               return const Color(0xFF0084FF);
             },
           ),
-          shape: MaterialStateProperty.all(
+          shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
             ),

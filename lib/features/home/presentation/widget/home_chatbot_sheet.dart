@@ -117,7 +117,7 @@ class _HomeChatbotSheetState extends State<HomeChatbotSheet> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'CloseGap Assistant',
+                              'Nexus Assistant',
                               style: context.textTheme.titleLarge?.copyWith(
                                 fontWeight: FontWeight.w800,
                               ),

@@ -21,7 +21,7 @@ class CvCoashViewModel extends Cubit<CvCoashState> {
   void _cvCoash(File file) async {
     emit(state.copyWith(isLoaddingCvCoash: true));
     var result = await _cvCoashUseCase.call(file);
-    print('viewwwwwwmodelllll${result}');
+    print('viewwwwwwmodelllll$result');
     switch (result) {
       case ApiSuccessResult():
         emit(
